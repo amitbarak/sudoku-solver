@@ -10,8 +10,10 @@ namespace SudokuSolver
     {
         static void Main(string[] args)
         {
-            Console.Out.WriteLine("check");
-            Console.ReadLine();
+            Console.WriteLine("type the board");
+            String input = Console.ReadLine();
+            Board board = new Board(input);
+            Console.WriteLine(board);
         }
     }
 }
