@@ -10,7 +10,15 @@ namespace SudokuSolver
     {
         static void Main(string[] args)
         {
-            Console.Out.WriteLine("check");
+            Console.WriteLine("type the board");
+            String input = Console.ReadLine();
+            if (!InputValidation.isValid(input))
+            {
+                Console.WriteLine(GeneralValues.error_message);
+                return;
+            }
+            Board board = new Board(input);
+            Console.WriteLine(board);
             Console.ReadLine();
         }
     }
