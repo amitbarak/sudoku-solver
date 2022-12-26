@@ -8,8 +8,8 @@ namespace SudokuSolver
 
     class Board
     {
-        public int Size {get;}
-        public int[,] grid { get; set;}
+        public int Size { get; }
+        public int[,] grid { get; set; }
         public Board()
         {
             this.Size = GeneralValues.Size;
@@ -29,6 +29,14 @@ namespace SudokuSolver
             }
         }
 
+        public int getElement(int col,int row)
+        {
+            return this.grid[col, row];
+        }
+        public void setPos(int col, int row,int element)
+        {
+            this.grid[col, row] = element;
+        }
         public override string ToString()
         {
             StringBuilder representation = new StringBuilder();
@@ -36,7 +44,7 @@ namespace SudokuSolver
             {
                 for (int j = 0; j < Size; j++)
                 {
-                    representation.Append(grid[i,j]);
+                    representation.Append(grid[j, i]);
                     representation.Append(" ");
                 }
                 representation.Append("\n");
