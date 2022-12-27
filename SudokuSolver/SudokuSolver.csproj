@@ -47,6 +47,7 @@
     <Compile Include="GeneralValues.cs" />
     <Compile Include="inputValidation.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

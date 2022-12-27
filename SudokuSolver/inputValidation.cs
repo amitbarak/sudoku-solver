@@ -22,8 +22,7 @@ namespace SudokuSolver
             Console.WriteLine("hello");
             foreach (char c in input)
             {
-                Console.WriteLine(c + min_value + max_value);
-                if ( c > max_value || c < min_value)
+                if (c > max_value || c < min_value)
                 {
                     Console.WriteLine("hi");
                     GeneralValues.error_message = "wrong char: " + c;

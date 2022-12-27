@@ -10,7 +10,6 @@ namespace SudokuSolver
     {
         public static int Size = 9;
         public static char min_char = '0';
-        public static char max_char = (char) (Size + min_char);
         public static String error_message = "";
 
     }

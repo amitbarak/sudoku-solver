@@ -8,8 +8,6 @@ namespace SudokuSolver
 
     class Board
     {
-        public int Size {get;}
-        public int[,] grid { get; set;}
         public Board()
         {
             this.Size = GeneralValues.Size;
@@ -36,7 +34,6 @@ namespace SudokuSolver
             {
                 for (int j = 0; j < Size; j++)
                 {
-                    representation.Append(grid[i,j]);
                     representation.Append(" ");
                 }
                 representation.Append("\n");
