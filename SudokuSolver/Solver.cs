@@ -33,7 +33,6 @@ namespace SudokuSolver
 
         private bool placeAllElements()
         {
-            
             int position = getFirstEmpty();
             if (position == -1)
             {
@@ -62,7 +61,7 @@ namespace SudokuSolver
             {
                 for (int col = 0; col < size; col++)
                 {
-                    if (board.getElement(col, row) == 0)
+                    if (board.getElement(col, row).isEmpty())
                     {
                         return row + col * size;
                     }
@@ -75,8 +74,8 @@ namespace SudokuSolver
         {
             for (int i = 0; i < size; i++)
             {
-                if (board.getElement(col, i) == element 
-                    || board.getElement(i, row) == element)
+                if (board.getElement(col, i).element == element 
+                    || board.getElement(i, row).element == element)
                     return false;
             }
             return checkNonetes(element, col, row);
@@ -93,7 +92,7 @@ namespace SudokuSolver
             {
                 for (int j = startRow; j < EndRow; j++)
                 {
-                    if (board.getElement(i, j) == element)
+                    if (board.getElement(i, j).element == element)
                         return false;
                 }
             }

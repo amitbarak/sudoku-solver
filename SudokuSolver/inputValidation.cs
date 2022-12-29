@@ -17,8 +17,8 @@ namespace SudokuSolver
 
         public static Boolean checkChars(String input)
         {
-            char max_value = GeneralValues.max_char;
-            char min_value = GeneralValues.min_char;
+            char max_value = GeneralValues.MaxChar;
+            char min_value = GeneralValues.MinChar;
             Console.WriteLine("hello");
             foreach (char c in input)
             {
