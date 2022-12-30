@@ -12,6 +12,23 @@ namespace SudokuSolver
         public Cell[,] grid { get; set; }
         public int nonetSize { get; private set; }
 
+        public Board(int[,] grid)
+        {
+           for(int col = 0; col < grid.GetLength(0); col++)
+            {
+                for (int row = 0; row < grid.GetLength(1); row++)
+                {
+                    this.grid[col, row] = new Cell((char)grid[col, row]);
+                }
+            }
+        }
+
+        public Board(Cell[,] grid)
+        {
+            this.grid = grid;
+            this.size = grid.GetLength(0);
+            this.nonetSize = (int)Math.Sqrt(size);
+        }
 
         public Board(String contents)
         {
