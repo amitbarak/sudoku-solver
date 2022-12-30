@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SudokuSolver
 {
-    static class GeneralValues
+    public static class GeneralValues
     {
         public static int Size = 9;
         public static char MinChar = '0';

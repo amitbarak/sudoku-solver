@@ -14,7 +14,7 @@ namespace SudokuSolver
         {
             Console.WriteLine("type the board");
             String input = Console.ReadLine();
-            if (!InputValidation.isValid(input))
+            if (!InputValidation.IsValid(input))
             {
                 Console.WriteLine(GeneralValues.error_message);
                 Console.ReadLine();
@@ -23,21 +23,21 @@ namespace SudokuSolver
             Console.WriteLine(board);
             timer.Start();
             SolveAndPrint(board);
-            Console.WriteLine(timer.Elapsed.ToString());
+            Console.WriteLine("miliseconds: " + timer.ElapsedMilliseconds.ToString());
             timer.Stop();
             Console.ReadLine();
         }
 
         public static void SolveAndPrint(Board board)
         {
-            Board solution = Solver.solve(board);
-            if (solution == null)
+            bool isSolution = Solver.Solve(board);
+            if (isSolution)
             {
-                Console.WriteLine("board is unsolvable");
+                Console.WriteLine(board);
             }
             else
             {
-                Console.WriteLine(solution);
+                Console.WriteLine("board is unsolvable");
             }
         }
     }

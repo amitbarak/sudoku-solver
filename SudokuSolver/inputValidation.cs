@@ -6,41 +6,59 @@ using System.Threading.Tasks;
 
 namespace SudokuSolver
 {
-    static class InputValidation
+    public static class InputValidation
     {
-        public static Boolean isValid(String input)
+        public static HashSet<char> validChars = new HashSet<char>();
+        public static HashSet<int> validLengths = new HashSet<int>();
+        public static int acceptedSize = 0;
+        public static int maxLength = 5;
+
+
+        public static Boolean IsValid(String input)
         {
-            Boolean valid = checkLegth(input);
-            valid &= checkChars(input);
+            for (int i = 1; i < maxLength; i++)
+            {
+                validLengths.Add((i * i) * (i * i));
+            }
+            Boolean valid = CheckLegth(input);
+            if (!valid)
+            {
+                return false;
+            }
+            setValidChars();
+            valid &= CheckChars(input);
             return valid;
         }
 
-        public static Boolean checkChars(String input)
+        public static Boolean CheckChars(String input)
         {
-            char max_value = GeneralValues.MaxChar;
-            char min_value = GeneralValues.MinChar;
-            Console.WriteLine("hello");
             foreach (char c in input)
             {
-                if (c > max_value || c < min_value)
+                if (!validChars.Contains(c))
                 {
-                    Console.WriteLine("hi");
-                    GeneralValues.error_message = "wrong char: " + c;
+                    GeneralValues.error_message = "invalid character: " + c;
                     return false;
                 }
             }
             return true;
         }
-        public static Boolean checkLegth(String input)
+        public static Boolean CheckLegth(String input)
         {
-            if (input.Length == GeneralValues.Size * GeneralValues.Size)
+            acceptedSize = (int)Math.Sqrt(input.Length);
+            if (!validLengths.Contains(input.Length))
             {
-                return true;
-            }
-            else
-            {
-                GeneralValues.error_message = "wrong size";
+                GeneralValues.error_message = "wrong length: " + input.Length;
                 return false;
+            }
+            return true;
+                
+        }
+
+        public static void setValidChars()
+        {
+            for (int i = 0; i <= acceptedSize; i++)
+            {
+                validChars.Add((char)(i + '0'));
             }
         }
 

@@ -6,25 +6,23 @@ using System.Threading.Tasks;
 namespace SudokuSolver
 {
 
-    class Board
+    public class Board
     {
-        public int Size { get; }
+        public int size { get; private set; }
         public Cell[,] grid { get; set; }
-        public Board()
-        {
-            this.Size = GeneralValues.Size;
-            this.grid = new Cell[Size, Size];
-        }
+        public int nonetSize { get; private set; }
+
 
         public Board(String contents)
         {
-            this.Size = GeneralValues.Size;
-            this.grid = new Cell[Size, Size];
-            for (int col = 0; col < Size; col++)
+            this.size = (int) Math.Sqrt(contents.Length);
+            this.nonetSize = (int) Math.Sqrt(size);
+            this.grid = new Cell[size, size];
+            for (int col = 0; col < size; col++)
             {
-                for (int row = 0; row < Size; row++)
+                for (int row = 0; row < size; row++)
                 {
-                    this.grid[col, row] = new Cell(contents[col + row * Size]);
+                    this.grid[col, row] = new Cell(contents[col + row * size]);
                 }
             }
         }
@@ -42,13 +40,16 @@ namespace SudokuSolver
         {
             this.grid[col, row] = new Cell(element);
         }
+
+
+
         public override string ToString()
         {
             StringBuilder representation = new StringBuilder();
             int lineLength = 0;
-            for (int i = 0; i < Size; i++)
+            for (int i = 0; i < size; i++)
             {
-                for (int j = 0; j < Size; j++)
+                for (int j = 0; j < size; j++)
                 {
                     representation.Append(grid[j, i]);
                     lineLength += grid[j, i].ToString().Length;
@@ -64,4 +65,7 @@ namespace SudokuSolver
             return representation.ToString();
         }
     }
+
+
+    
 }
