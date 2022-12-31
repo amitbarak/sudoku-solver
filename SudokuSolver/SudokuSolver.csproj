@@ -44,8 +44,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board.cs" />
+    <Compile Include="Cell.cs" />
+    <Compile Include="ConsoleHandler.cs" />
+    <Compile Include="FileHandler.cs" />
     <Compile Include="GeneralValues.cs" />
+    <Compile Include="IInputOutput.cs" />
     <Compile Include="inputValidation.cs" />
+    <Compile Include="IReader.cs" />
+    <Compile Include="IWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

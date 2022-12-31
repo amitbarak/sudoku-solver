@@ -6,47 +6,37 @@ using System.Threading.Tasks;
 
 namespace SudokuSolver
 {
-    class Solver
+    public class Solver
     {
         private Board board;
-        private int size;
         private Solver(Board board)
         {
             this.board = board;
-            this.size = board.Size;
 
         }
-        public static Board solve(Board board)
+        public static bool Solve(Board board)
         {
             Solver s = new Solver(board);
-            if (s.placeAllElements())
-            {
-                return board;
-            }
-            else
-            {
-                return null;
-            }
+            return s.PlaceAllElements();
         }
 
         
 
-        private bool placeAllElements()
+        private bool PlaceAllElements()
         {
-            
-            int position = getFirstEmpty();
+            int position = GetFirstEmpty();
             if (position == -1)
             {
                 return true;
             }
-            int col = position / size;
-            int row = position % size;
-            for (int element = 1; element <= 9; element++)
+            int col = position / board.size;
+            int row = position % board.size;
+            for (int element = 1; element <= board.size; element++)
             {
-                if (checkPlacement(element, col, row))
+                if (CheckPlacement(element, col, row))
                 {
                     board.setPos(col, row, element);
-                    if (placeAllElements()) {
+                    if (PlaceAllElements()) {
                         return true;
                     }
                 }
@@ -56,68 +46,68 @@ namespace SudokuSolver
 
         }
 
-        private int getFirstEmpty()
+        private int GetFirstEmpty()
         {
-            for (int row = 0; row < size; row++)
+            for (int row = 0; row < board.size; row++)
             {
-                for (int col = 0; col < size; col++)
+                for (int col = 0; col < board.size; col++)
                 {
-                    if (board.getElement(col, row) == 0)
+                    if (board.getElement(col, row).IsEmpty())
                     {
-                        return row + col * size;
+                        return row + col * board.size;
                     }
                 }
             }
             return -1;
         }
 
-        private bool checkPlacement(int element, int col, int row)
+        private bool CheckPlacement(int element, int col, int row)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < board.size; i++)
             {
-                if (board.getElement(col, i) == element 
-                    || board.getElement(i, row) == element)
+                if (board.getElement(col, i).element == element 
+                    || board.getElement(i, row).element == element)
                     return false;
             }
-            return checkNonetes(element, col, row);
+            return CheckNonetes(element, col, row);
         }
 
-        private bool checkNonetes(int element, int col, int row)
+        private bool CheckNonetes(int element, int col, int row)
         {
-            int startCol = getNonetStartCol(col);
-            int startRow = getNonetStartRow(row);
-            int EndCol = getNonetEndCol(col);
-            int EndRow = getNonetEndRow(row);
+            int startCol = GetNonetStartCol(col);
+            int startRow = GetNonetStartRow(row);
+            int EndCol = GetNonetEndCol(col);
+            int EndRow = GetNonetEndRow(row);
 
             for (int i = startCol; i < EndCol; i++)
             {
                 for (int j = startRow; j < EndRow; j++)
                 {
-                    if (board.getElement(i, j) == element)
+                    if (board.getElement(i, j).element == element)
                         return false;
                 }
             }
             return true;
         }
 
-        private int getNonetStartCol(int col)
+        private int GetNonetStartCol(int col)
         {
-            return (col / 3) * 3;
+            return (col / board.nonetSize) * board.nonetSize;
         }
 
 
-        private int getNonetStartRow(int row)
+        private int GetNonetStartRow(int row)
         {
-            return (row / 3) * 3;
+            return (row / board.nonetSize) * board.nonetSize;
         }
 
-        private int getNonetEndCol(int col)
+        private int GetNonetEndCol(int col)
         {
-            return (col / 3) * 3 + 3;
+            return (col / board.nonetSize) * board.nonetSize + board.nonetSize;
         }
-        private int getNonetEndRow(int row)
+        private int GetNonetEndRow(int row)
         {
-            return (row / 3) * 3 + 3;
+            return (row / board.nonetSize) * board.nonetSize + board.nonetSize;
         }
 
     }

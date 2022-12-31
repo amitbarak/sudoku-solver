@@ -12,3 +12,4 @@ C:\Users\USER-HP1\source\repos\sudoku-solver\SudokuSolver\obj\Debug\SudokuSolver
 C:\Users\USER-HP1\source\repos\sudoku-solver\SudokuSolver\obj\Debug\SudokuSolver.csproj.CoreCompileInputs.cache
 C:\Users\USER-HP1\source\repos\sudoku-solver\SudokuSolver\obj\Debug\SudokuSolver.exe
 C:\Users\USER-HP1\source\repos\sudoku-solver\SudokuSolver\obj\Debug\SudokuSolver.pdb
+C:\Users\USER-HP1\source\repos\sudoku-solver\SudokuSolver\obj\Debug\SudokuSolver.csproj.SuggestedBindingRedirects.cache

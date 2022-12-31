@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace SudokuSolver
 {
-    static class GeneralValues
+    public static class GeneralValues
     {
         public static int Size = 9;
-        public static char min_char = '0';
+        public static char MinChar = '0';
+        public static char MaxChar = '9';
         public static String error_message = "";
 
     }

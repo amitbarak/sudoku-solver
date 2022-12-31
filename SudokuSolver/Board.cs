@@ -6,39 +6,83 @@ using System.Threading.Tasks;
 namespace SudokuSolver
 {
 
-    class Board
+    public class Board
     {
-        public Board()
+        public int size { get; private set; }
+        public Cell[,] grid { get; set; }
+        public int nonetSize { get; private set; }
+
+        public Board(int[,] grid)
         {
-            this.Size = GeneralValues.Size;
-            this.grid = new int[Size, Size];
+           for(int col = 0; col < grid.GetLength(0); col++)
+            {
+                for (int row = 0; row < grid.GetLength(1); row++)
+                {
+                    this.grid[col, row] = new Cell((char)grid[col, row]);
+                }
+            }
+        }
+
+        public Board(Cell[,] grid)
+        {
+            this.grid = grid;
+            this.size = grid.GetLength(0);
+            this.nonetSize = (int)Math.Sqrt(size);
         }
 
         public Board(String contents)
         {
-            this.Size = GeneralValues.Size;
-            this.grid = new int[Size, Size];
-            for (int i = 0; i < Size; i++)
+            this.size = (int) Math.Sqrt(contents.Length);
+            this.nonetSize = (int) Math.Sqrt(size);
+            this.grid = new Cell[size, size];
+            for (int col = 0; col < size; col++)
             {
-                for (int j = 0; j < Size; j++)
+                for (int row = 0; row < size; row++)
                 {
-                    this.grid[i, j] = (int)(contents[j + i * Size] - '0');
+                    this.grid[col, row] = new Cell(contents[col + row * size]);
                 }
             }
         }
 
+        public Cell getElement(int col,int row)
+        {
+            return this.grid[col, row];
+        }
+        public void setPos(int col, int row, Cell element)
+        {
+            this.grid[col, row] = element;
+        }
+        
+        public void setPos(int col, int row, int element)
+        {
+            this.grid[col, row] = new Cell(element);
+        }
+
+
+
         public override string ToString()
         {
             StringBuilder representation = new StringBuilder();
-            for (int i = 0; i < Size; i++)
+            int lineLength = 0;
+            for (int i = 0; i < size; i++)
             {
-                for (int j = 0; j < Size; j++)
+                for (int j = 0; j < size; j++)
                 {
-                    representation.Append(" ");
+                    representation.Append(grid[j, i]);
+                    lineLength += grid[j, i].ToString().Length;
                 }
                 representation.Append("\n");
+                for (int j = 0; j < lineLength; j++)
+                {
+                    representation.Append("-");
+                }
+                representation.Append("\n");
+                lineLength = 0;
             }
             return representation.ToString();
         }
     }
+
+
+    
 }
