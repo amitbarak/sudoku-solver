@@ -29,9 +29,10 @@ namespace SudokuSolver
             {
                 return true;
             }
-            int col = position / board.size;
-            int row = position % board.size;
-            for (int element = 1; element <= board.size; element++)
+            int col = position % board.size;
+            int row = position / board.size;
+            Cell currentCell = this.board.getElement(col, row);
+            foreach (int element in currentCell.GetPossibleValues())
             {
                 if (CheckPlacement(element, col, row))
                 {
@@ -54,7 +55,7 @@ namespace SudokuSolver
                 {
                     if (board.getElement(col, row).IsEmpty())
                     {
-                        return row + col * board.size;
+                        return row * board.size + col;
                     }
                 }
             }
@@ -67,6 +68,7 @@ namespace SudokuSolver
             {
                 if (board.getElement(col, i).element == element 
                     || board.getElement(i, row).element == element)
+
                     return false;
             }
             return CheckNonetes(element, col, row);
@@ -109,6 +111,8 @@ namespace SudokuSolver
         {
             return (row / board.nonetSize) * board.nonetSize + board.nonetSize;
         }
+
+
 
     }
 }

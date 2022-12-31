@@ -10,13 +10,12 @@ namespace SudokuSolver
     {
         public static HashSet<char> validChars = new HashSet<char>();
         public static HashSet<int> validLengths = new HashSet<int>();
-        public static int acceptedSize = 0;
         public static int maxLength = 5;
 
 
         public static Boolean IsValid(String input)
         {
-            for (int i = 1; i < maxLength; i++)
+            for (int i = 1; i <= maxLength; i++)
             {
                 validLengths.Add((i * i) * (i * i));
             }
@@ -44,7 +43,7 @@ namespace SudokuSolver
         }
         public static Boolean CheckLegth(String input)
         {
-            acceptedSize = (int)Math.Sqrt(input.Length);
+            GeneralValues.acceptedSize = (int)Math.Sqrt(input.Length);
             if (!validLengths.Contains(input.Length))
             {
                 GeneralValues.error_message = "wrong length: " + input.Length;
@@ -56,7 +55,7 @@ namespace SudokuSolver
 
         public static void setValidChars()
         {
-            for (int i = 0; i <= acceptedSize; i++)
+            for (int i = 0; i <= GeneralValues.acceptedSize; i++)
             {
                 validChars.Add((char)(i + '0'));
             }

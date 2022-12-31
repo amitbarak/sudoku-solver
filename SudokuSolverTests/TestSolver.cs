@@ -16,6 +16,7 @@ namespace SudokuSolverTests
 
 
             //act
+            BoardOptimizer.Optimize(board);
             var result = Solver.Solve(board);
 
             //assert
@@ -27,11 +28,11 @@ namespace SudokuSolverTests
         public void Solve_UnSolvebleBoard9x9_ReaturnsFalse ()
         {
             //Arange    
-            var board = new Board("850000124720000890004000701600090004100820000000060100000502000000705600620000407"
-);
+            var board = new Board("850000124720000890004000701600090004100820000000060100000502000000705600620000407");
 
 
             //act
+            BoardOptimizer.Optimize(board);
             var result = Solver.Solve(board);
 
             //assert
@@ -46,6 +47,7 @@ namespace SudokuSolverTests
 
 
             //act
+            BoardOptimizer.Optimize(board);
             var result = Solver.Solve(board);
 
             //assert

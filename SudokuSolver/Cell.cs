@@ -8,27 +8,79 @@ namespace SudokuSolver
 {
     public class Cell
     {
-        public int element;
+        private HashSet<int> possibleValues; 
+        
+        public int element { get; set; }
+        
+
         public Cell(int element)
         {
+            if (element == 0)
+            {
+                this.possibleValues = new HashSet<int>(
+                    Enumerable.Range(1, GeneralValues.acceptedSize));
+            }
+            else
+            {
+                this.possibleValues = new HashSet<int>(element);
+                this.possibleValues.Add(element);
+            }
             this.element = element;
         }
 
         public Cell(char element)
         {
-            this.element = element - '0';
+            if (element == GeneralValues.emptyChar)
+            {
+                this.possibleValues = new HashSet<int>(
+                    Enumerable.Range(1, GeneralValues.acceptedSize));
+            }
+            else
+            {
+                this.possibleValues = new HashSet<int>();
+                this.possibleValues.Add(element - GeneralValues.emptyChar);
+            }
+            this.element = (element - GeneralValues.emptyChar);
         }
 
+        public Cell(HashSet<int> possibleValues)
+        {
+            this.possibleValues = possibleValues;
+        }
+
+        public HashSet<int> GetPossibleValues()
+        {
+            return this.possibleValues;
+        }
+        
+        public void AddPossibleValue(int element)
+        {
+            this.possibleValues.Add(element);
+            if (possibleValues.Count() == 1)
+            {
+                _ = this.element == possibleValues.First();
+            }
+        }
+        public void removePossibleValue(int element)
+        {
+            this.possibleValues.Remove(element);
+            if (possibleValues.Count() == 1)
+            {
+                _ = this.element == possibleValues.First();
+            }
+        }
+    
         public bool IsEmpty()
         {
-            return element == 0;
+            return possibleValues.Count() == 0 || 
+                element == 0;
         }
-
+        
         public override string ToString()
         {
             StringBuilder reperesention = new StringBuilder();
             int maxSpaces = 3;
-            int spaceCount = maxSpaces - this.element.ToString().Length;
+            int spaceCount = maxSpaces - element.ToString().Length;
             reperesention.Append("|");
             for (int i = 0; i < spaceCount; i++)
             {

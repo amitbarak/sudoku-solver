@@ -59,13 +59,13 @@ namespace SudokuSolver
             Console.WriteLine(board);
 
             SolveAndPrint(board, resultWriters);
-            Console.ReadLine();
         }
 
         public static void SolveAndPrint(Board board, List<IWriter> outputList)
         {
 
-            timer.Start();
+            timer.Restart();
+            BoardOptimizer.Optimize(board);
             bool isSolution = Solver.Solve(board);
             Console.WriteLine("miliseconds:" + timer.ElapsedMilliseconds.ToString());
             timer.Stop();
@@ -93,7 +93,6 @@ namespace SudokuSolver
             String input = "";
             while (input.Equals(""))
             {
-                IOhandler.Write("Sudoku Solver");
                 IOhandler.Write("where should the board be taken from?");
                 IOhandler.Write("c for console, f for file");
                 String answer = IOhandler.Read();
