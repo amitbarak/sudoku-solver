@@ -62,21 +62,10 @@ namespace SudokuSolver
 
 
 
-        /*
-        public bool IsValid()
+        public bool isValid()
         {
-            int flag = 0;
-            foreach (int value in this.grid[])
-            {
-                if (value != 0)
-                {
-                    int bit = 1 << value;
-                    if ((flag & bit) != 0) return false;
-                    flag |= bit;
-                }
-            }
-            return true;
-        }*/
+            
+        }
         public override string ToString()
         {
             StringBuilder representation = new StringBuilder();

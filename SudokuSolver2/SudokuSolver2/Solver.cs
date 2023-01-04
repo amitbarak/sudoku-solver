@@ -241,6 +241,7 @@ namespace SudokuSolver
             return backtrackByBits(col, row + 1, bitBoard, nonetsDigits,
                          rowDigits, columnDigits);
         }
+        
 
 
     }
