@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SudokuSolver2.NewFolder
 {
-    internal class Node
+    public class Node
     {
         public Node left, right, up, down;
         public ColumnNode Header;
@@ -82,7 +82,7 @@ namespace SudokuSolver2.NewFolder
         public void removeFromUp()
         {
             up.down = down;
-            down.up = 
+            down.up = up;
 
         }
         

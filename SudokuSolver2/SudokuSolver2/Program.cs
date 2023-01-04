@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SudokuSolver2.NewFolder;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,6 +15,7 @@ namespace SudokuSolver
 
         static void Main(string[] args)
         {
+
             while (true)
             {
                 ConsoleHandler consoleHandler = new ConsoleHandler();
@@ -46,7 +48,12 @@ namespace SudokuSolver
             return resultWriters;
         }
 
-
+        /// <summary>
+        /// this function handles a string that represents a board
+        /// and prints it to the result writers
+        /// </summary>
+        /// <param name="input">a string that represents a board</param>
+        /// <param name="resultWriters">writers to print the result</param>
         public static void handleInput(String input, List<IWriter> resultWriters)
         {
             if (!InputValidation.IsValid(input))
@@ -60,8 +67,8 @@ namespace SudokuSolver
             Board board = new Board(input);
 
             Console.WriteLine(board);
-
-            SolveAndPrint(board, resultWriters);
+            DancingLinksSolver.Solve(board, resultWriters);
+            //SolveAndPrint(board, resultWriters);
         }
 
         public static void SolveAndPrint(Board board, List<IWriter> outputList)
@@ -98,6 +105,11 @@ namespace SudokuSolver
         }
 
 
+        /// <summary>
+        /// gets the string from the user
+        /// </summary>
+        /// <param name="IOhandler"></param>
+        /// <returns></returns>
         public static String getInput(IInputOutput IOhandler)
         {
             String input = "";
@@ -129,6 +141,7 @@ namespace SudokuSolver
                         input = "";
                     }
                 }
+                //invalid input
                 else
                 {
                     IOhandler.Write("wrong input, please type c or f");

@@ -8,7 +8,8 @@ namespace SudokuSolver
 
     public class Board
     {
-        public int size { get; private set; }
+        public int cellsNumber;
+        public int rowSize { get; private set; }
         public Cell[,] grid { get; set; }
         public int nonetSize { get; private set; }
 
@@ -26,21 +27,21 @@ namespace SudokuSolver
         public Board(Cell[,] grid)
         {
             this.grid = grid;
-            this.size = grid.GetLength(0);
-            this.nonetSize = (int)Math.Sqrt(size);
+            this.rowSize = grid.GetLength(0);
+            this.nonetSize = (int)Math.Sqrt(rowSize);
         }
 
         public Board(String contents)
         {
-            this.size = (int)Math.Sqrt(contents.Length);
-            GeneralValues.acceptedSize = size;
-            this.nonetSize = (int)Math.Sqrt(size);
-            this.grid = new Cell[size, size];
-            for (int col = 0; col < size; col++)
+            this.rowSize = (int)Math.Sqrt(contents.Length);
+            GeneralValues.acceptedSize = rowSize;
+            this.nonetSize = (int)Math.Sqrt(rowSize);
+            this.grid = new Cell[rowSize, rowSize];
+            for (int col = 0; col < rowSize; col++)
             {
-                for (int row = 0; row < size; row++)
+                for (int row = 0; row < rowSize; row++)
                 {
-                    this.grid[col, row] = new Cell(contents[col + row * size]);
+                    this.grid[col, row] = new Cell(contents[col + row * rowSize]);
                 }
             }
         }
@@ -64,15 +65,29 @@ namespace SudokuSolver
 
         public bool isValid()
         {
-            
+            bool b = true;
+            for (int col = 0; col < rowSize; col++)
+            {
+                for (int row = 0; row < rowSize; row++)
+                {
+                    if(!CheckPlacement(col, row, grid[col, row].element))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return b;
         }
+
+        
+        
         public override string ToString()
         {
             StringBuilder representation = new StringBuilder();
             int lineLength = 0;
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < rowSize; i++)
             {
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < rowSize; j++)
                 {
                     representation.Append(grid[j, i]);
                     lineLength += grid[j, i].ToString().Length;
@@ -86,6 +101,57 @@ namespace SudokuSolver
                 lineLength = 0;
             }
             return representation.ToString();
+        }
+
+
+        private bool CheckPlacement(int element, int col, int row)
+        {
+            for (int i = 0; i < this.rowSize; i++)
+            {
+                if (this.getElement(col, i).element == element
+                    || this.getElement(i, row).element == element)
+
+                    return false;
+            }
+            return CheckNonetes(element, col, row);
+        }
+
+        private bool CheckNonetes(int element, int col, int row)
+        {
+            int startCol = GetNonetStartCol(col);
+            int startRow = GetNonetStartRow(row);
+            int EndCol = GetNonetEndCol(col);
+            int EndRow = GetNonetEndRow(row);
+
+            for (int i = startCol; i < EndCol; i++)
+            {
+                for (int j = startRow; j < EndRow; j++)
+                {
+                    if (this.getElement(i, j).element == element)
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        private int GetNonetStartCol(int col)
+        {
+            return (col / this.nonetSize) * this.nonetSize;
+        }
+
+
+        private int GetNonetStartRow(int row)
+        {
+            return (row / this.nonetSize) * this.nonetSize;
+        }
+
+        private int GetNonetEndCol(int col)
+        {
+            return (col / this.nonetSize) * this.nonetSize + this.nonetSize;
+        }
+        private int GetNonetEndRow(int row)
+        {
+            return (row / this.nonetSize) * this.nonetSize + this.nonetSize;
         }
     }
 

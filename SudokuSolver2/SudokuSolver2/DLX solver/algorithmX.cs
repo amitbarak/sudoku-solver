@@ -11,9 +11,12 @@ namespace SudokuSolver2.NewFolder
     {
         public bool Solve(Board board)
         {
-            //to do:            //create the Dancing nodes linked list
+            //to do:            
+            //create the Dancing nodes linked list
+            //create 
+            
             // this is the h node from the theory paper
-            ColumnNode starterNode = new ColumnNode();
+            ColumnNode starterNode = new ColumnNode(-1);
             return true;
 
         }

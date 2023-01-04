@@ -41,18 +41,18 @@ namespace SudokuSolver
             {
             }
             Solver s = new Solver(board);
-            int[,] intGrid = new int[board.size, board.size];
-            for (int col = 0; col < board.size; col++)
+            int[,] intGrid = new int[board.rowSize, board.rowSize];
+            for (int col = 0; col < board.rowSize; col++)
             {
-                for (int row = 0; row < board.size; row++)
+                for (int row = 0; row < board.rowSize; row++)
                 {
                     intGrid[col, row] = board.getElement(col, row).element;
                 }
             }
             bool isSolved = s.solveByBits(intGrid);
-            for (int col = 0; col < board.size; col++)
+            for (int col = 0; col < board.rowSize; col++)
             {
-                for (int row = 0; row < board.size; row++)
+                for (int row = 0; row < board.rowSize; row++)
                 {
                     board.getElement(col, row).element = intGrid[col, row];
                 }
@@ -153,17 +153,17 @@ namespace SudokuSolver
         bool solveByBits(int[,] intBoard)
         {
             int[,] nonetsDigits = new int[board.nonetSize, board.nonetSize];
-            int[] columnDigits = new int[board.size];
-            int[] rowDigits = new int[board.size];
+            int[] columnDigits = new int[board.rowSize];
+            int[] rowDigits = new int[board.rowSize];
 
-            Array.Clear(nonetsDigits, 0, board.size);
-            Array.Clear(rowDigits, 0, board.size);
-            Array.Clear(columnDigits, 0, board.size);
+            Array.Clear(nonetsDigits, 0, board.rowSize);
+            Array.Clear(rowDigits, 0, board.rowSize);
+            Array.Clear(columnDigits, 0, board.rowSize);
 
             // get 3x3 submatrix, row and column digits
-            for (int col = 0; col < board.size; col++)
+            for (int col = 0; col < board.rowSize; col++)
             {
-                for (int row = 0; row < board.size; row++)
+                for (int row = 0; row < board.rowSize; row++)
                 {
                     if (intBoard[col, row] != 0)
                     {
@@ -193,11 +193,11 @@ namespace SudokuSolver
         bool backtrackByBits(int col, int row, int[,] bitBoard, int[,] nonetsDigits,
            int[] rowDigits, int[] columnDigits)
         {
-            if (col == board.size)
+            if (col == board.rowSize)
             {
                 return true;
             }
-            if (row == board.size)
+            if (row == board.rowSize)
             {
                 return backtrackByBits(col + 1, 0, bitBoard, nonetsDigits,
                              rowDigits, columnDigits);
@@ -205,7 +205,7 @@ namespace SudokuSolver
 
             if (bitBoard[col, row] == 0)
             {
-                for (int i = 1; i <= board.size; i++)
+                for (int i = 1; i <= board.rowSize; i++)
                 {
                     int digit = 1 << (i - 1);
 

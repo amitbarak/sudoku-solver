@@ -28,9 +28,9 @@ namespace SudokuSolver
         private bool setBoardPossibleValues()
         {
             bool b = false;
-            for (int col = 0; col < board.size; col++) //O(n)
+            for (int col = 0; col < board.rowSize; col++) //O(n)
             {
-                for (int row = 0; row < board.size; row++)//O(n)
+                for (int row = 0; row < board.rowSize; row++)//O(n)
                 {
                     Cell currentCell = board.getElement(col, row);
                     if (currentCell.IsEmpty())
@@ -58,7 +58,7 @@ namespace SudokuSolver
             bool b = false;
             int elementInLine;
             int elementInCol;
-            for (int i = 0; i < board.size; i++)
+            for (int i = 0; i < board.rowSize; i++)
             {
                 elementInLine = board.getElement(i, row).element;
                 elementInCol = board.getElement(col, i).element;
