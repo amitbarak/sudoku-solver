@@ -31,6 +31,12 @@ namespace SudokuSolver
             this.nonetSize = (int)Math.Sqrt(rowSize);
         }
 
+
+        /// <summary>
+        /// the constructor for the board class
+        /// recives the input and creates a corrosponding matrix board
+        /// </summary>
+        /// <param name="contents">the string contents the board will be created from</param>
         public Board(String contents)
         {
             this.rowSize = (int)Math.Sqrt(contents.Length);
@@ -46,15 +52,35 @@ namespace SudokuSolver
             }
         }
 
+
+        /// <summary>
+        /// returns an element from the board
+        /// </summary>
+        /// <param name="col">column index</param>
+        /// <param name="row">row index</param>
+        /// <returns></returns>
         public Cell getElement(int col, int row)
         {
             return this.grid[col, row];
         }
+
+        /// <summary>
+        /// sets an element of the board
+        /// </summary>
+        /// <param name="col">int column index</param>
+        /// <param name="row">int row index</param>
+        /// <param name="element">Cell</param>
         public void setPos(int col, int row, Cell element)
         {
             this.grid[col, row] = element;
         }
 
+        /// <summary>
+        /// sets an element of the board
+        /// </summary>
+        /// <param name="col">culomn index</param>
+        /// <param name="row">row index</param>
+        /// <param name="element">int element</param>
         public void setPos(int col, int row, int element)
         {
             this.grid[col, row] = new Cell(element);
@@ -62,25 +88,38 @@ namespace SudokuSolver
 
 
 
-
+        /// <summary>
+        /// checks the validity of the board (for example that there aren't two of the same number in the same row)
+        /// </summary>
+        /// <returns>true if board is valid, false otherwise</returns>
         public bool isValid()
         {
+            int tempValue = 0;
             bool b = true;
+            //iterate the board cells
             for (int col = 0; col < rowSize; col++)
             {
                 for (int row = 0; row < rowSize; row++)
                 {
-                    if(!CheckPlacement(col, row, grid[col, row].element))
+                    //check the validity of the cell
+                    tempValue = grid[col, row].element;
+                    grid[col, row].element = 0;
+                    if (tempValue != 0 && !CheckPlacement(tempValue, col, row))
                     {
                         return false;
                     }
+                    grid[col, row].element = tempValue;
                 }
             }
-            return b;
+            return true;
         }
 
         
-        
+
+        /// <summary>
+        /// toString of the board. prints if nicely
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             StringBuilder representation = new StringBuilder();
@@ -104,17 +143,34 @@ namespace SudokuSolver
         }
 
 
+
+        /// <summary>
+        /// checks if a placement of a an element in the board is ok
+        /// </summary>
+        /// <param name="element"> element to be checked</param>
+        /// <param name="col"> column index</param>
+        /// <param name="row"> row index</param>
+        /// <returns></returns>
         private bool CheckPlacement(int element, int col, int row)
         {
+            //checks for the same values in the same row and column
             for (int i = 0; i < this.rowSize; i++)
             {
-                if (this.getElement(col, i).element == element
-                    || this.getElement(i, row).element == element)
+                if (grid[col, i].element == element
+                    || grid[col, i].element == element)
 
                     return false;
             }
             return CheckNonetes(element, col, row);
         }
+
+        /// <summary>
+        /// checks if the elemnt can be placed here
+        /// </summary>
+        /// <param name="element">number element</param>
+        /// <param name="col">column index</param>
+        /// <param name="row">row index</param>
+        /// <returns></returns>
 
         private bool CheckNonetes(int element, int col, int row)
         {
@@ -127,28 +183,51 @@ namespace SudokuSolver
             {
                 for (int j = startRow; j < EndRow; j++)
                 {
-                    if (this.getElement(i, j).element == element)
+                    if (grid[col, i].element == element)
                         return false;
                 }
             }
             return true;
         }
 
+
+        /// <summary>
+        /// returns the starting index column of the Nonet
+        /// </summary>
+        /// <param name="col">index of column</param>
+        /// <returns></returns>
         private int GetNonetStartCol(int col)
         {
             return (col / this.nonetSize) * this.nonetSize;
         }
 
 
+        /// <summary>
+        /// returns the starting index of the Nonet
+        /// </summary>
+        /// <param name="row">row index</param>
+        /// <returns></returns>
         private int GetNonetStartRow(int row)
         {
             return (row / this.nonetSize) * this.nonetSize;
         }
 
+
+        /// <summary>
+        /// returns the ending column index of the Nonet
+        /// </summary>
+        /// <param name="col">column index</param>
+        /// <returns></returns>
         private int GetNonetEndCol(int col)
         {
             return (col / this.nonetSize) * this.nonetSize + this.nonetSize;
         }
+
+        /// <summary>
+        /// returns the index of the end row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
         private int GetNonetEndRow(int row)
         {
             return (row / this.nonetSize) * this.nonetSize + this.nonetSize;
