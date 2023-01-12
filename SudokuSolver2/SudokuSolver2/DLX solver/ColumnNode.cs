@@ -16,15 +16,17 @@ namespace SudokuSolver2.NewFolder
         public ColumnNode(int index) : base(header: null)
         {   
             size = 0;
+            index = 0;
         }
 
 
+        //remove the column from the list
         public void cover()
         {
-            //remove the column from the list
+            //remove the headerNode 
             right.left = left;
             left.right = right;
-            //remove the rows that contain this column
+            //remove all of the rows that contain this column
             for (Node i = down; i != this; i = i.down)
             {
                 for (Node j = i.right; j != i; j = j.right)
