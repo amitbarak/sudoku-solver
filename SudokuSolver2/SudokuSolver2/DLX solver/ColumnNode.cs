@@ -14,8 +14,7 @@ namespace SudokuSolver2.NewFolder
         public int index;
 
         public ColumnNode(int index) : base(header: null)
-        {
-            
+        {   
             size = 0;
         }
 

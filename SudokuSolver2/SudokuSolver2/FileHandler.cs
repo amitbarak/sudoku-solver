@@ -17,6 +17,10 @@ namespace SudokuSolver
         public String address { get; set; }
 
 
+        /// <summary>
+        /// creates a new FileHandler object
+        /// </summary>
+        /// <param name="address">a string with the adress of the file</param>
         public FileHandler(String address)
         {
             this.address = address;

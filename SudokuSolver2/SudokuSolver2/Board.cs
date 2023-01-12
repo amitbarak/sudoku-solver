@@ -22,6 +22,8 @@ namespace SudokuSolver
                     this.grid[col, row] = new Cell((char)grid[col, row]);
                 }
             }
+
+            this.cellsNumber = rowSize * rowSize;
         }
 
         public Board(Cell[,] grid)
@@ -29,6 +31,7 @@ namespace SudokuSolver
             this.grid = grid;
             this.rowSize = grid.GetLength(0);
             this.nonetSize = (int)Math.Sqrt(rowSize);
+            this.cellsNumber = rowSize * rowSize;
         }
 
 
@@ -50,6 +53,8 @@ namespace SudokuSolver
                     this.grid[col, row] = new Cell(contents[col + row * rowSize]);
                 }
             }
+
+            this.cellsNumber = rowSize * rowSize;
         }
 
 
@@ -119,7 +124,7 @@ namespace SudokuSolver
         /// <summary>
         /// toString of the board. prints if nicely
         /// </summary>
-        /// <returns></returns>
+        /// <returns>string of the object</returns>
         public override string ToString()
         {
             StringBuilder representation = new StringBuilder();

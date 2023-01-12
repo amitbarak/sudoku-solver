@@ -24,13 +24,17 @@ namespace SudokuSolver2.NewFolder
             //to do:
             //create the Dancing nodes linked list
             // this is the h node from the theory paper
-            ColumnNode starterNode = new ColumnNode(-1); 
+            ColumnNode starterNode = new ColumnNode(-1);
+            DLXConvertor convertor = new DLXConvertor(board, starterNode);
+            convertor.createLinkedList();
+            
 
-            
-            
 
             //
             return true;
         }
     }
+
+    
+    
 }

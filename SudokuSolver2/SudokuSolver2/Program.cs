@@ -20,15 +20,18 @@ namespace SudokuSolver
             {
                 ConsoleHandler consoleHandler = new ConsoleHandler();
                 String input = getInput(consoleHandler);
-                List<IWriter> resultWriters = setOutputList();
+                List<IWriter> resultWriters = SetOutputList();
 
 
                 handleInput(input, resultWriters);
             }
         }
 
-
-        public static List<IWriter> setOutputList()
+        /// <summary>
+        /// sets the List of writers the program should output to
+        /// </summary>
+        /// <returns></returns>
+        public static List<IWriter> SetOutputList()
         {
             ConsoleHandler consoleHandler = new ConsoleHandler();
             List<IWriter> resultWriters = new List<IWriter>();
@@ -37,6 +40,7 @@ namespace SudokuSolver
             consoleHandler.Write("type f for file or enter otherwise:");
             String answer = consoleHandler.Read();
             FileHandler outputFile = null;
+            //file was selected
             if (answer == "f")
             {
                 consoleHandler.Write("type the address of the file this will go into:");
@@ -47,6 +51,8 @@ namespace SudokuSolver
             consoleHandler.Write("");
             return resultWriters;
         }
+
+
 
         /// <summary>
         /// this function handles a string that represents a board
@@ -108,7 +114,7 @@ namespace SudokuSolver
         /// <summary>
         /// gets the string from the user
         /// </summary>
-        /// <param name="IOhandler"></param>
+        /// <param name="IOhandler">an input output handler</param>
         /// <returns></returns>
         public static String getInput(IInputOutput IOhandler)
         {

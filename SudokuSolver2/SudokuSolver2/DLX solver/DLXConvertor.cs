@@ -1,6 +1,7 @@
 ﻿using SudokuSolver;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,31 +25,79 @@ namespace SudokuSolver2.NewFolder
             return colIndex * board.rowSize + rowIndex;
         }
 
-
-        public int GetRowConstraintIndex(int colIndex, int CellValue)
+        
+        public int GetRowConstraintIndex(int rowIndex, int CellValue)
         {
-            return board.cellsNumber + colIndex * board.rowSize + CellValue;
+            return board.cellsNumber + rowIndex * board.rowSize + CellValue;
         }
 
 
 
-        public int GetColConstraintIndex(int rowIndex, int CellValue)
+        public int GetColConstraintIndex(int colIndex, int CellValue)
         {
-            return board.cellsNumber * 2 + rowIndex * board.rowSize + CellValue;
+            return board.cellsNumber * 2 + colIndex * board.rowSize + CellValue;
         }
 
-        public int GetSqrConstraintIndex(int colIndex, int y, int CellValue)
+        public int GetSqrConstraintIndex(int colIndex, int rowIndex, int CellValue)
         {
+            if (this.board.nonetSize <= 1)
+            {
+                //the square constraint is quite useLess if the nonetSize is 1
+                //however keeping it won't hurt the algorythm
+                return (board.cellsNumber) * 3 + colIndex + rowIndex + CellValue; // TODO: check this line later
+            }
             return (board.cellsNumber) * 3 + (board.nonetSize * (colIndex / board.nonetSize)
-                + y / board.nonetSize) * board.rowSize + CellValue;
+                + rowIndex / board.nonetSize) * board.rowSize + CellValue;
         }
 
-        public int GetRowIndex(int x, int y, int CellValue)
+        public int getNodeID(int colIndex, int rowIndex, int CellValue)
         {
-            return x * board.cellsNumber + y * board.rowSize + CellValue;
+            return colIndex * board.cellsNumber + rowIndex * board.rowSize + CellValue;
         }
 
-        public ColumnNode createLinkedList(Board board)
+        public void CreateCellConstraints(List<ColumnNode> columnList, 
+            int colIndex, int rowIndex, int cellValue)
+        {
+
+            //form links for all rows and columns
+
+
+            int NodeID = getNodeID(colIndex, rowIndex, cellValue);
+
+            int indexInColList = GetCellConstraintIndex(colIndex, rowIndex);
+            Node Cell = new Node(columnList[indexInColList], NodeID);
+
+            indexInColList = GetRowConstraintIndex(rowIndex, cellValue);
+            Node row = new Node(columnList[indexInColList], NodeID);
+
+            indexInColList = GetColConstraintIndex(colIndex, cellValue);
+            Node col = new Node(columnList[indexInColList], NodeID);
+
+            indexInColList = GetSqrConstraintIndex(colIndex, rowIndex, cellValue);
+            Node sqr = new Node(columnList[indexInColList], NodeID);
+
+
+            Node.LinkNodes(Cell, row, col, sqr);
+            Cell.LinkToColumn();
+            row.LinkToColumn();
+            col.LinkToColumn();
+            sqr.LinkToColumn();
+
+
+        }
+
+        public void CreateCellConstraints(List<ColumnNode> columnList,
+            int colIndex, int rowIndex)
+        {
+
+            for (int i = 0; i < board.rowSize; i++)
+            {
+                CreateCellConstraints(columnList, colIndex, rowIndex, i);
+            }
+        }
+
+
+        public ColumnNode createLinkedList()
         {
             List<ColumnNode> columnsList = new List<ColumnNode>();
 
@@ -59,15 +108,32 @@ namespace SudokuSolver2.NewFolder
             {
                 ColumnNode col = new ColumnNode(col_ind);
                 //insert a node before the former node
-                col.right = h;
-                col.left = h.left;
-                h.left.right = col;
-                h.left = col;
+                col.addToRightByRow(h);
 
                 //add to the columns list
                 columnsList.Add(col);
             }
+            Cell currentCell;
+            //in this for loop we create the nodes for the rows
+            for (int colIndex = 0; colIndex < board.rowSize; colIndex++)
+            {
+                for (int rowIndex = 0; rowIndex < board.rowSize; rowIndex++)
+                {
+
+                    currentCell = board.getElement(colIndex, rowIndex);
+                    if (currentCell.IsEmpty())
+                    {
+                        CreateCellConstraints(columnsList, colIndex, rowIndex);
+                    }
+                    else
+                    {
+                        CreateCellConstraints(columnsList, colIndex, rowIndex, currentCell.element - 1);
+                    }
+                }         
+            }
+            
             return h;
         }
+
     }
 }

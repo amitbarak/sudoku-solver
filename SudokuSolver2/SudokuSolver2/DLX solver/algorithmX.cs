@@ -17,6 +17,9 @@ namespace SudokuSolver2.NewFolder
             
             // this is the h node from the theory paper
             ColumnNode starterNode = new ColumnNode(-1);
+            DLXConvertor convertor = new DLXConvertor(board, starterNode);
+            //create the columns
+            convertor.createLinkedList();
             return true;
 
         }
