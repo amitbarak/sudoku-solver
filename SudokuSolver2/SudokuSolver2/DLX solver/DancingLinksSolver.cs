@@ -27,7 +27,7 @@ namespace SudokuSolver2.NewFolder
             ColumnNode starterNode = new ColumnNode(-1);
             DLXConvertor convertor = new DLXConvertor(board, starterNode);
             convertor.createLinkedList();
-            
+            Console.WriteLine(convertor.ToString());
 
 
             //

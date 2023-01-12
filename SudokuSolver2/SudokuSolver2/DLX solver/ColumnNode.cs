@@ -19,7 +19,42 @@ namespace SudokuSolver2.NewFolder
         }
 
 
+        public void cover()
+        {
+            //remove the column from the list
+            right.left = left;
+            left.right = right;
+            //remove the rows that contain this column
+            for (Node i = down; i != this; i = i.down)
+            {
+                for (Node j = i.right; j != i; j = j.right)
+                {
+                    j.down.up = j.up;
+                    j.up.down = j.down;
+                    j.Header.size--;
+                }
+            }
+        }
         
+
+        public void UnCover()
+        {
+            //add the column back to the list
+            for (Node i = down; i != this; i = i.down)
+            {
+                for (Node j = i.right; j != i; j = j.right)
+                {
+                    j.down.up = j;
+                    j.up.down = j;
+                    j.Header.size++;
+                }
+            }
+            right.left = this;
+            left.right = this;
+        }
+
+
+
 
     }
 

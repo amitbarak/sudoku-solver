@@ -20,7 +20,18 @@ namespace SudokuSolver2.NewFolder
             DLXConvertor convertor = new DLXConvertor(board, starterNode);
             //create the columns
             convertor.createLinkedList();
+            Console.WriteLine("hi");
             return true;
+
+        }
+
+
+
+
+        public void Search()
+        {
+            //TODO: Search method creation
+
 
         }
     }

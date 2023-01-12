@@ -55,7 +55,7 @@ namespace SudokuSolver2.NewFolder
             return colIndex * board.cellsNumber + rowIndex * board.rowSize + CellValue;
         }
 
-        public void CreateCellConstraints(List<ColumnNode> columnList, 
+        public void CreateCellConstraints(ColumnNode[] HeadersArr, 
             int colIndex, int rowIndex, int cellValue)
         {
 
@@ -65,16 +65,16 @@ namespace SudokuSolver2.NewFolder
             int NodeID = getNodeID(colIndex, rowIndex, cellValue);
 
             int indexInColList = GetCellConstraintIndex(colIndex, rowIndex);
-            Node Cell = new Node(columnList[indexInColList], NodeID);
+            Node Cell = new Node(HeadersArr[indexInColList], NodeID);
 
             indexInColList = GetRowConstraintIndex(rowIndex, cellValue);
-            Node row = new Node(columnList[indexInColList], NodeID);
+            Node row = new Node(HeadersArr[indexInColList], NodeID);
 
             indexInColList = GetColConstraintIndex(colIndex, cellValue);
-            Node col = new Node(columnList[indexInColList], NodeID);
+            Node col = new Node(HeadersArr[indexInColList], NodeID);
 
             indexInColList = GetSqrConstraintIndex(colIndex, rowIndex, cellValue);
-            Node sqr = new Node(columnList[indexInColList], NodeID);
+            Node sqr = new Node(HeadersArr[indexInColList], NodeID);
 
 
             Node.LinkNodes(Cell, row, col, sqr);
@@ -86,32 +86,32 @@ namespace SudokuSolver2.NewFolder
 
         }
 
-        public void CreateCellConstraints(List<ColumnNode> columnList,
+        public void CreateCellConstraints(ColumnNode[] HeadersArr,
             int colIndex, int rowIndex)
         {
 
             for (int i = 0; i < board.rowSize; i++)
             {
-                CreateCellConstraints(columnList, colIndex, rowIndex, i);
+                CreateCellConstraints(HeadersArr, colIndex, rowIndex, i);
             }
         }
 
 
         public ColumnNode createLinkedList()
         {
-            List<ColumnNode> columnsList = new List<ColumnNode>();
+            ColumnNode[] HeadersArr = new ColumnNode[board.cellsNumber * 4];
 
             //in this for loop we create the maximun number of columns
             // that could be used
             //there are 4 constraints so its the input length * 4
-            for (int col_ind = 0; col_ind < board.cellsNumber * 4; col_ind++)
+            for (int col_ind = 0; col_ind < HeadersArr.Length; col_ind++)
             {
                 ColumnNode col = new ColumnNode(col_ind);
                 //insert a node before the former node
                 col.addToRightByRow(h);
 
                 //add to the columns list
-                columnsList.Add(col);
+                HeadersArr[col_ind] = col;
             }
             Cell currentCell;
             //in this for loop we create the nodes for the rows
@@ -123,11 +123,11 @@ namespace SudokuSolver2.NewFolder
                     currentCell = board.getElement(colIndex, rowIndex);
                     if (currentCell.IsEmpty())
                     {
-                        CreateCellConstraints(columnsList, colIndex, rowIndex);
+                        CreateCellConstraints(HeadersArr, colIndex, rowIndex);
                     }
                     else
                     {
-                        CreateCellConstraints(columnsList, colIndex, rowIndex, currentCell.element - 1);
+                        CreateCellConstraints(HeadersArr, colIndex, rowIndex, currentCell.element - 1);
                     }
                 }         
             }
