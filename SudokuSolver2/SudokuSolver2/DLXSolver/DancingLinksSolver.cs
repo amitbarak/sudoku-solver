@@ -1,4 +1,4 @@
-﻿using SudokuSolver;
+﻿using SudokuSolver2.DLXSolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver2.NewFolder
+namespace SudokuSolver2.DLXSolver
 {
     internal class DancingLinksSolver
     {
@@ -29,8 +29,14 @@ namespace SudokuSolver2.NewFolder
             convertor.createLinkedList();
             AlgorithmX alg = new AlgorithmX(starterNode);
             alg.Search();
+            Board resultBoard = alg.getSolution();
             Console.WriteLine(convertor.ToString());
 
+            
+            foreach (IWriter writer in resultWriters)
+            {
+                writer.Write(resultBoard.ToString());
+            }
 
             //
             return true;

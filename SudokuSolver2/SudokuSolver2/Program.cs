@@ -1,4 +1,4 @@
-﻿using SudokuSolver2.NewFolder;
+﻿using SudokuSolver2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver
+namespace SudokuSolver2
 {
     class Program
     {
@@ -18,11 +18,12 @@ namespace SudokuSolver
 
             while (true)
             {
+                Console.WriteLine("C:\\Users\\USER-HP1\\Downloads\\sudoku_example (2).txt");
                 ConsoleHandler consoleHandler = new ConsoleHandler();
                 String input = getInput(consoleHandler);
                 List<IWriter> resultWriters = SetOutputList();
 
-
+                
                 handleInput(input, resultWriters);
             }
         }
@@ -73,7 +74,9 @@ namespace SudokuSolver
             Board board = new Board(input);
 
             Console.WriteLine(board);
-            DancingLinksSolver.Solve(board, resultWriters);
+            timer.Start();
+            DLXSolver.DancingLinksSolver.Solve(board, resultWriters);
+            Console.WriteLine("ElapsedMilliseconds: " + timer.ElapsedMilliseconds);
             //SolveAndPrint(board, resultWriters);
         }
 

@@ -1,4 +1,4 @@
-﻿using SudokuSolver;
+﻿using SudokuSolver2.DLXSolver;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver2.NewFolder
+namespace SudokuSolver2.DLXSolver
 {
     public class Node
     {

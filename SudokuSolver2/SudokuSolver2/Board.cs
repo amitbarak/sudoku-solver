@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace SudokuSolver
+namespace SudokuSolver2
 {
 
     public class Board
@@ -15,11 +16,16 @@ namespace SudokuSolver
 
         public Board(int[,] grid)
         {
+
+            this.rowSize = (int)Math.Sqrt(grid.GetLength(0) * grid.GetLength(1));
+            GeneralValues.acceptedSize = rowSize;
+            this.nonetSize = (int)Math.Sqrt(rowSize);
+            this.grid = new Cell[rowSize, rowSize];
             for (int col = 0; col < grid.GetLength(0); col++)
             {
                 for (int row = 0; row < grid.GetLength(1); row++)
                 {
-                    this.grid[col, row] = new Cell((char)grid[col, row]);
+                    this.grid[col, row] = new Cell(grid[col, row]);
                 }
             }
 
