@@ -10,67 +10,68 @@ namespace SudokuSolver2.DLXSolver
 {
     public class Node
     {
-        public Node left, right, up, down;
+        public Node Left, Right, Up, Down;
         public ColumnNode Header;
-        public int ID;
+        public OptionPoint Possibility;
         public Node(ColumnNode header)
         {
-            left = right = up = down = this;
+            Left = Right = Up = Down = this;
             Header = header;
+            Possibility = new OptionPoint(-1, -1, -1);
         }
 
-        public Node(ColumnNode header, int id)
+        public Node(ColumnNode header, OptionPoint id)
         {
-            left = right = up = down = this;
+            Left = Right = Up = Down = this;
             Header = header;
-            this.ID = id;
+            this.Possibility = id;
         }
 
 
-        public Node(Node left, Node right, Node up, Node down, ColumnNode header, int id)
+        public Node(Node left, Node right, Node up, Node down, ColumnNode header, OptionPoint id)
         {
-            this.left = left;
-            this.right = right;
-            this.up = up;
-            this.down = down;
+            this.Left = left;
+            this.Right = right;
+            this.Up = up;
+            this.Down = down;
             Header = header;
-            this.ID = id;
+            this.Possibility = id;
         }
 
 
         public void LinkLeft(Node node)
         {
-            node.left = left;
-            node.right = this;
-            left.right = node;
-            left = node;
+            node.Left = Left;
+            node.Right = this;
+            Left.Right = node;
+            Left = node;
         }
 
         public void LinkRight(Node node)
         {
-            node.right = this.right;
-            node.left = this;
-            right.left = node;
-            right = node;
+            node.Right = this.Right;
+            node.Left = this;
+            Right.Left = node;
+            Right = node;
         }
 
 
         public void LinkUp(Node node)
         {
-            node.up = up;
-            node.down = this;
-            up.down = node;
-            up = node;
+            node.Up = Up;
+            node.Down = this;
+            Up.Down = node;
+            Up = node;
         }
 
 
 
         public void LinkDown(Node node)
         {
-            node.down = this.down;
-            node.up = this;
-            down.up = node;
-            down = node;
+            node.Down = this.Down;
+            node.Up = this;
+            Down.Up = node;
+            Down = node;
         }
 
 
@@ -79,58 +80,64 @@ namespace SudokuSolver2.DLXSolver
             //links a node into its column
             //without the column node
             ColumnNode header = this.Header;
-            header.size += 1;
-            down = header;
-            up = header.up;
-            header.up.down = this;
-            header.up = this;
+            header.Size += 1;
+            Down = header;
+            Up = header.Up;
+            header.Up.Down = this;
+            header.Up = this;
         }
 
 
 
         public void RemoveLeftRight()
         {
-            left.right = right;
-            right.left = left;
+            Left.Right = Right;
+            Right.Left = Left;
         }
 
 
 
-        public void RemoveFromDown()
+        public void RemoveFromColumn()
         {
-            up.down = down;
-            down.up = up;
+            Up.Down = Down;
+            Down.Up = Up;
+            Header.Size -= 1;
         }
 
 
-        public void removeFromUp()
-        {
-            up.down = down;
-            down.up = up;
 
+        public void RestoreToColumn()
+        {
+            Down.Up = this;
+            Up.Down = this;
+            Header.Size++;
         }
 
 
         public void addToRightByRow(Node node)
         {
 
-            this.right = node;
-            this.left = node.left;
-            node.left.right = this;
-            node.left = this;
+            this.Right = node;
+            this.Left = node.Left;
+            node.Left.Right = this;
+            node.Left = this;
         }
 
-        public static void LinkNodes(Node Cell, Node Row, Node Column, Node Square)
+        public static void LinkNodes(Node cell, Node row, Node column, Node square)
         {
             //the order of the links is:
             //row1 -> square1 -> cell1 -> column1 ->row1 ->..
 
             //this three lines of code connect all four node to each other
             //(circularly)
-            Row.LinkRight(Square);
-            Square.LinkRight(Cell);
-            Cell.LinkRight(Column);
+            row.LinkRight(square);
+            square.LinkRight(cell);
+            cell.LinkRight(column);
 
+            cell.LinkToColumn();
+            row.LinkToColumn();
+            column.LinkToColumn();
+            square.LinkToColumn();
 
         }
     }

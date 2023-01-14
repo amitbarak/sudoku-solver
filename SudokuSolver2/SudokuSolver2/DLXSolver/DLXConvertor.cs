@@ -49,7 +49,7 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetRowConstraintIndex(int rowIndex, int CellValue)
         {
-            return board.cellsNumber + rowIndex * board.rowSize + CellValue;
+            return board.cellsNumber + rowIndex * board.rowSize + CellValue - 1;
         }
 
 
@@ -61,64 +61,82 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetColConstraintIndex(int colIndex, int CellValue)
         {
-            return board.cellsNumber * 2 + colIndex * board.rowSize + CellValue;
+            return board.cellsNumber * 2 + colIndex * board.rowSize + CellValue - 1;
         }
 
+
+        /// <summary>
+        /// returns index to the columnNode in the columnNodes array
+        /// </summary>
+        /// <param name="colIndex"></param>
+        /// <param name="rowIndex"></param>
+        /// <param name="CellValue"></param>
+        /// <returns></returns>
         public int GetSqrConstraintIndex(int colIndex, int rowIndex, int CellValue)
         {
-            if (this.board.nonetSize <= 1)
-            {
-                //the square constraint is quite useLess if the nonetSize is 1
-                //however keeping it won't hurt the algorythm
-                return (board.cellsNumber) * 3 + colIndex + rowIndex + CellValue; // TODO: check this line later
-            }
             return (board.cellsNumber) * 3 + (board.nonetSize * (colIndex / board.nonetSize)
-                + rowIndex / board.nonetSize) * board.rowSize + CellValue;
+                + rowIndex / board.nonetSize) * board.rowSize + CellValue - 1;
         }
 
-        public int getNodeID(int colIndex, int rowIndex, int CellValue)
-        {
-            return colIndex * board.cellsNumber + rowIndex * board.rowSize + CellValue;
-        }
+        /// <summary>
+        /// creates a row of nodes for a given cell and it's possible value and
+        /// adds it to the matrix
+        /// </summary>
+        /// <param name="HeadersArr">array of column headers</param>
+        /// <param name="colIndex">index of the column</param>
+        /// <param name="rowIndex">index of the row</param>
+        /// <param name="cellValue">a possible value for a cell in that position</param>
 
-        public void CreateCellConstraints(ColumnNode[] HeadersArr, 
-            int colIndex, int rowIndex, int cellValue)
+        public void CreateRow(ColumnNode[] HeadersArr,
+            OptionPoint option)
         {
+            //index to the column node in the columnNodes array
+            int indexInColList;
 
             //form links for all rows and columns
 
 
-            int NodeID = getNodeID(colIndex, rowIndex, cellValue);
 
-            int indexInColList = GetCellConstraintIndex(colIndex, rowIndex);
-            Node Cell = new Node(HeadersArr[indexInColList], NodeID);
+            //creates a node for the Position/Cell constraint:
+            //Only one number can occupy a cell
+            indexInColList = GetCellConstraintIndex(option.Column, option.Row);
+            Node cell = new Node(HeadersArr[indexInColList], option);
 
-            indexInColList = GetRowConstraintIndex(rowIndex, cellValue);
-            Node row = new Node(HeadersArr[indexInColList], NodeID);
+            //creates a node for the Row constraint:
+            //Each row must contain all numbers once
+            indexInColList = GetRowConstraintIndex(option.Row, option.CellValue);
+            Node row = new Node(HeadersArr[indexInColList], option);
 
-            indexInColList = GetColConstraintIndex(colIndex, cellValue);
-            Node col = new Node(HeadersArr[indexInColList], NodeID);
+            //creates a node for the column constraint:
+            //Each column must contain all numbers once
+            indexInColList = GetColConstraintIndex(option.Column, option.CellValue);
+            Node col = new Node(HeadersArr[indexInColList], option);
 
-            indexInColList = GetSqrConstraintIndex(colIndex, rowIndex, cellValue);
-            Node sqr = new Node(HeadersArr[indexInColList], NodeID);
+            //creates a node for the square constraint:
+            //Each square must contain all numbers once (square = Nonet = 3x3 in reular sudoku)
+            indexInColList = GetSqrConstraintIndex(option.Column, option.Row, option.CellValue);
+            Node sqr = new Node(HeadersArr[indexInColList], option);
 
-
-            Node.LinkNodes(Cell, row, col, sqr);
-            Cell.LinkToColumn();
-            row.LinkToColumn();
-            col.LinkToColumn();
-            sqr.LinkToColumn();
+            //links the nodes to each other as they are in the same row, and to their columns
+            Node.LinkNodes(cell, row, col, sqr);
+            
 
 
         }
 
-        public void CreateCellConstraints(ColumnNode[] HeadersArr,
+        /// <summary>
+        /// creates 
+        /// </summary>
+        /// <param name="HeadersArr"></param>
+        /// <param name="colIndex"></param>
+        /// <param name="rowIndex"></param>
+        public void CreateRows(ColumnNode[] HeadersArr,
             int colIndex, int rowIndex)
         {
 
-            for (int i = 0; i < board.rowSize; i++)
+            for (int cellValue = 1; cellValue <= board.rowSize; cellValue++)
             {
-                CreateCellConstraints(HeadersArr, colIndex, rowIndex, i);
+                CreateRow(HeadersArr, new OptionPoint(colIndex, rowIndex, cellValue));
             }
         }
 
@@ -140,6 +158,7 @@ namespace SudokuSolver2.DLXSolver
                 HeadersArr[col_ind] = col;
             }
             Cell currentCell;
+            OptionPoint currentOption;
             //in this for loop we create the nodes for the rows
             for (int colIndex = 0; colIndex < board.rowSize; colIndex++)
             {
@@ -149,11 +168,12 @@ namespace SudokuSolver2.DLXSolver
                     currentCell = board.getElement(colIndex, rowIndex);
                     if (currentCell.IsEmpty())
                     {
-                        CreateCellConstraints(HeadersArr, colIndex, rowIndex);
+                        CreateRows(HeadersArr, colIndex, rowIndex);
                     }
                     else
                     {
-                        CreateCellConstraints(HeadersArr, colIndex, rowIndex, currentCell.element - 1);
+                        currentOption = new OptionPoint(colIndex, rowIndex, currentCell.element);
+                        CreateRow(HeadersArr, currentOption);
                     }
                 }         
             }

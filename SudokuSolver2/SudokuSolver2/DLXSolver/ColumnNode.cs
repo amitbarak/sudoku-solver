@@ -10,53 +10,53 @@ namespace SudokuSolver2.DLXSolver
 {
     public class ColumnNode : Node
     {
-        public int size;
-        public int index;
+        public int Size;
 
         public ColumnNode(int index) : base(header: null)
-        {   
-            size = 0;
-            index = 0;
+        {
+            Size = 0;
         }
 
-
-        //remove the column from the list
-        public void cover()
+        /// <summary>
+        /// removes the column from the matrix, and removes all the rows that this culomn is in
+        /// </summary>
+        public void Cover()
         {
             //remove the columnNode 
-            right.left = left;
-            left.right = right;
+            Right.Left = Left;
+            Left.Right = Right;
             //remove all of the rows that this culomn contains a node in
 
             //iterate through all the matrix rows that contains this column
-            for (Node i = down; i != this; i = i.down) 
+            for (Node i = Down; i != this; i = i.Down) 
             {
                 //iterate through all of the nodes in the row
-                for (Node j = i.right; j != i; j = j.right)
+                for (Node j = i.Right; j != i; j = j.Right)
                 {
                     //removes the rows that are in this Column
-                    j.down.up = j.up;
-                    j.up.down = j.down;
-                    j.Header.size--;
+                    j.RemoveFromColumn();
                 }
             }
+            //NOTE: there is no need to handle the connections in the same row as 
+            //it's entire row is removed. In the uncover method this will become usefull
         }
-        
+
 
         public void UnCover()
         {
-            //add the column back to the list
-            for (Node i = down; i != this; i = i.down)
+            //iterate through all the matrix rows that contains this column
+            for (Node i = Down; i != this; i = i.Down)
             {
-                for (Node j = i.right; j != i; j = j.right)
+                //iterate through all the matrix rows that contains this column
+                for (Node j = i.Right; j != i; j = j.Right)
                 {
-                    j.down.up = j;
-                    j.up.down = j;
-                    j.Header.size++;
+                    j.RestoreToColumn();
+
                 }
             }
-            right.left = this;
-            left.right = this;
+            //adding to culomn node back to the list
+            Right.Left = this;
+            Left.Right = this;
         }
 
 

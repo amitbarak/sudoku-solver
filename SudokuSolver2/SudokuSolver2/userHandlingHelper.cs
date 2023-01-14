@@ -86,6 +86,7 @@ namespace SudokuSolver2
         /// <param name="outputList">a list of objects to output to</param>
         public static void SolveAndPrint(Board board, List<IWriter> outputList)
         {
+            //checking the board is valid
             if (!board.isValid())
             {
                 writeToAll(outputList, "board is not valid");

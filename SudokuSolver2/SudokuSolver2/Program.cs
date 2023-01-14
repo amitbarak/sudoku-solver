@@ -16,13 +16,13 @@ namespace SudokuSolver2
         {
             List<IWriter> resultWriters;
             String input;
+            ConsoleHandler consoleHandler = new ConsoleHandler();
             while (true)
             {
                 //clears the console
                 Console.Clear();
                 Console.WriteLine("C:\\Users\\USER-HP1\\Downloads\\sudoku_example (2).txt");
                 //gets the input from the user
-                ConsoleHandler consoleHandler = new ConsoleHandler();
                 input = userHandlingHelper.getInput(consoleHandler);
                 //sets a list of writers to write the result to (for example console and file)
                 resultWriters = userHandlingHelper.SetOutputList();

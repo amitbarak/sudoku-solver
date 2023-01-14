@@ -19,6 +19,6 @@ namespace SudokuSolver2
         //the accepted row size of the board which will be set by in Validition class
         public static int acceptedSize = -1;
         //the possible lengths of input
-        public static int[] validLengths = { 1, 4, 16, 81, 256, 625 };
+        public static int[] validLengths = { 1, 16, 81, 256, 625 };
     }
 }
