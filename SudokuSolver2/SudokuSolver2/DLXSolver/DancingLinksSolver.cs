@@ -11,16 +11,8 @@ namespace SudokuSolver2.DLXSolver
     internal class DancingLinksSolver
     {
 
-        public static bool Solve(Board board, List<IWriter> resultWriters)
+        public static Board? Solve(Board board)
         {
-            if (!board.isValid())
-            {
-                foreach (IWriter writer in resultWriters)
-                {
-                    writer.Write("board is not valid");
-                }
-                return false;
-            }
             //to do:
             //create the Dancing nodes linked list
             // this is the h node from the theory paper
@@ -28,18 +20,15 @@ namespace SudokuSolver2.DLXSolver
             DLXConvertor convertor = new DLXConvertor(board, starterNode);
             convertor.createLinkedList();
             AlgorithmX alg = new AlgorithmX(starterNode);
-            alg.Search();
-            Board resultBoard = alg.getSolution();
-            Console.WriteLine(convertor.ToString());
-
-            
-            foreach (IWriter writer in resultWriters)
+            if (alg.Search())
             {
-                writer.Write(resultBoard.ToString());
+                return alg.getSolution();
             }
-
-            //
-            return true;
+            else
+            {
+                return null;
+            }
+            
         }
     }
 

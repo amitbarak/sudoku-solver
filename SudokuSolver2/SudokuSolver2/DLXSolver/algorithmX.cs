@@ -14,13 +14,22 @@ namespace SudokuSolver2.DLXSolver
         public ColumnNode header;
         public Stack<Node> result = new Stack<Node>();
 
-
+        /// <summary>
+        /// creates a list of all the columns in the matrix.
+        /// </summary>
+        /// <param name="starterNode">a culomn node at index -1. it is a node 
+        /// before all ColumnNodes</param>
         public AlgorithmX(ColumnNode starterNode)
         {
             header = starterNode;
         }
 
 
+        /// <summary>
+        /// returns a board with the sudoku solution after the search method 
+        /// was called
+        /// </summary>
+        /// <returns>weather or not the sulition was found</returns>
         public Board getSolution()
         {
             int rowSize = (int) Math.Sqrt(result.Count());
@@ -32,8 +41,8 @@ namespace SudokuSolver2.DLXSolver
                 cellsIDsList.Add(cellID.ID);
             }
             cellsIDsList.Sort();
-            
-            //
+
+            //creates a list of the final values for each cell
             int[] elementValues = new int[cellsIDsList.Count()];
             int index = 0;
             foreach (var cellID in cellsIDsList)
@@ -52,12 +61,15 @@ namespace SudokuSolver2.DLXSolver
                 }
             }
 
+            //creates and returns board made from the grid
             Board board = new Board(finalGrid);
             return board;
-
-
-
         }
+
+        /// <summary>
+        /// gets the culomn with the least number of nodes
+        /// </summary>
+        /// <returns>returns the culomn with the least number of nodes</returns>
         public ColumnNode getMinCol()
         {
             ColumnNode j = (ColumnNode)header.right;
@@ -76,19 +88,25 @@ namespace SudokuSolver2.DLXSolver
 
 
 
-
+        /// <summary>
+        /// searches for the sulition of the board 
+        /// </summary>
+        /// <returns>whether or not the sulition was found</returns>
         public bool Search()
         {
+            //if the matrix has no columns, then the solution is found
             if (header.right == header)
                 return true;
 
-            ColumnNode c = getMinCol();
-            c.cover();
+            //get the column with the least number of nodes
+            ColumnNode minColumn = getMinCol();
+            minColumn.cover();
 
-            for (Node r = c.down; r != c; r = r.down)
+            for (Node rowsIterator = minColumn.down; rowsIterator != minColumn; rowsIterator = rowsIterator.down)
             {
-                result.Push(r);
-                for (Node j = r.right; j != r; j = j.right)
+                //includes teh rowsIterator in the solution
+                result.Push(rowsIterator);
+                for (Node j = rowsIterator.right; j != rowsIterator; j = j.right)
                 {
                     j.Header.cover();
                 }
@@ -98,15 +116,15 @@ namespace SudokuSolver2.DLXSolver
                     return true;
                 }
 
-                r = result.Pop();
-                c = r.Header;
+                rowsIterator = result.Pop();
+                minColumn = rowsIterator.Header;
 
-                for (Node j = r.left; j != r; j = j.left)
+                for (Node j = rowsIterator.left; j != rowsIterator; j = j.left)
                 {
                     j.Header.UnCover();
                 }
             }
-            c.UnCover();
+            minColumn.UnCover();
         
             return false;
 

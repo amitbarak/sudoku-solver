@@ -44,7 +44,11 @@ namespace SudokuSolver2
         /// <returns> the line read from the console </returns>
         public String Read()
         {
-            String input = Console.ReadLine();
+            String? input = Console.ReadLine();
+            if (input == null || input.Equals(""))
+            {
+                throw new IOException();
+            }
             return input;
         }
     }

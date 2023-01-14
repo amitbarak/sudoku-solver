@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 namespace SudokuSolver2
 {
 
@@ -106,7 +105,6 @@ namespace SudokuSolver2
         public bool isValid()
         {
             int tempValue = 0;
-            bool b = true;
             //iterate the board cells
             for (int col = 0; col < rowSize; col++)
             {

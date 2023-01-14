@@ -50,13 +50,32 @@ namespace SudokuSolver2
         ///<returns>the line read from the console</returns>
         public String Read()
         {
-            FileStream fs = new FileStream(address, FileMode.Open, FileAccess.Read);
-            StreamReader sr = new StreamReader(fs);
-            sr.BaseStream.Seek(0, SeekOrigin.Begin);
-            string str = sr.ReadLine();
-            sr.Close();
-            fs.Close();
-            return str;
+            try
+            {
+                FileStream fs = new FileStream(address, FileMode.Open, FileAccess.Read);
+                StreamReader sr = new StreamReader(fs);
+                sr.BaseStream.Seek(0, SeekOrigin.Begin);
+#pragma warning disable CS8600
+                String input = sr.ReadLine(); //this warning is being handled at the catch
+#pragma warning restore CS8600 
+                sr.Close();
+                fs.Close();
+                if (input == null || input.Equals(""))
+                {
+                    throw new IOException();
+                }
+
+                return input;
+            }
+            catch (Exception e) when (
+                    e is FileNotFoundException ||
+                    e is FileLoadException || e is IOException
+                    || e is OutOfMemoryException
+                    )
+            {
+                throw new IOException();
+            }
+
         }
 
     }

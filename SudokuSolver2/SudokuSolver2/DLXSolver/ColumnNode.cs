@@ -23,14 +23,18 @@ namespace SudokuSolver2.DLXSolver
         //remove the column from the list
         public void cover()
         {
-            //remove the headerNode 
+            //remove the columnNode 
             right.left = left;
             left.right = right;
-            //remove all of the rows that contain this column
-            for (Node i = down; i != this; i = i.down)
+            //remove all of the rows that this culomn contains a node in
+
+            //iterate through all the matrix rows that contains this column
+            for (Node i = down; i != this; i = i.down) 
             {
+                //iterate through all of the nodes in the row
                 for (Node j = i.right; j != i; j = j.right)
                 {
+                    //removes the rows that are in this Column
                     j.down.up = j.up;
                     j.up.down = j.down;
                     j.Header.size--;

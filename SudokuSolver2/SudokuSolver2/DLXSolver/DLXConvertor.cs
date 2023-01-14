@@ -8,31 +8,57 @@ using System.Threading.Tasks;
 
 namespace SudokuSolver2.DLXSolver
 {
+
+    /// <summary>
+    /// This class is used to convert a sudoku board into:
+    /// a matrix of 1's and 0's.
+    /// However! the matrix is represented by
+    /// A Quadripley lincked list of nodes. And not by a 2D array.
+    /// the Quadripley lincked list will later be used to solve the sudoku board
+    /// </summary>
     public class DLXConvertor
     {
-
-        //root node is h
+        
         public ColumnNode h;
         public Board board;
+        
+        //create the DLX convertor
         public DLXConvertor(Board board, ColumnNode h)
         {
             this.h = h;
             this.board = board;
         }
 
+        /// <summary>
+        /// returns index to the columnNode in the columnNodes array
+        /// of the co
+        /// </summary>
+        /// <param name="colIndex">the index of the column of the cell</param>
+        /// <param name="rowIndex">the index of the row of the cell</param>
+        /// <returns></returns>
         public int GetCellConstraintIndex(int colIndex, int rowIndex)
         {
             return colIndex * board.rowSize + rowIndex;
         }
 
-        
+        /// <summary>
+        /// returns index to the columnNode in the columnNodes array
+        /// </summary>
+        /// <param name="rowIndex"></param>
+        /// <param name="CellValue"></param>
+        /// <returns></returns>
         public int GetRowConstraintIndex(int rowIndex, int CellValue)
         {
             return board.cellsNumber + rowIndex * board.rowSize + CellValue;
         }
 
 
-
+        /// <summary>
+        /// returns index to the columnNode in the columnNodes array
+        /// </summary>
+        /// <param name="colIndex">the index of the culomn</param>
+        /// <param name="CellValue">the posible value of the cell</param>
+        /// <returns></returns>
         public int GetColConstraintIndex(int colIndex, int CellValue)
         {
             return board.cellsNumber * 2 + colIndex * board.rowSize + CellValue;
