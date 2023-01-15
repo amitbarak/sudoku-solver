@@ -8,14 +8,11 @@ using System.Threading.Tasks;
 
 namespace SudokuSolver2.DLXSolver
 {
-    internal class DancingLinksSolver
+    public class DancingLinksSolver
     {
 
         public static Board? Solve(Board board)
         {
-            //to do:
-            //create the Dancing nodes linked list
-            // this is the h node from the theory paper
             ColumnNode starterNode = new ColumnNode(-1);
             DLXConvertor convertor = new DLXConvertor(board, starterNode);
             convertor.createLinkedList();

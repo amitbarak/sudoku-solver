@@ -29,8 +29,8 @@ namespace SudokuSolver2
 
                 //validates and handles the input
                 userHandlingHelper.handleInput(input, resultWriters);
-                Console.WriteLine("press enter to continue");
-                Console.ReadLine();
+                consoleHandler.Write("press enter to continue");
+                consoleHandler.Read();
             }
         }
 

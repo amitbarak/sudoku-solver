@@ -49,7 +49,7 @@ namespace SudokuSolver2.DLXSolver
             }
 
             //creates and returns board made from the grid
-            Board board = new Board(finalGrid);
+            Board board = new(finalGrid);
             return board;
         }
 
@@ -76,9 +76,12 @@ namespace SudokuSolver2.DLXSolver
 
 
         /// <summary>
-        /// searches for the sulition of the board 
+        /// searches for the solution of the board 
         /// </summary>
-        /// <returns>whether or not the sulition was found</returns>
+        /// <remarks>
+        /// this is the direct implemtation of algorythm X on a DLX structure
+        /// </remarks>
+        /// <returns>whether or not the solution was found</returns>
         public bool Search()
         {
             //if the matrix has no columns, then the solution is found
@@ -92,13 +95,14 @@ namespace SudokuSolver2.DLXSolver
             
             for (Node rowsIterator = minColumn.Down; rowsIterator != minColumn; rowsIterator = rowsIterator.Down)
             {
-                //includes teh rowsIterator in the solution
+                //includes the rowsIterator in the solution
                 result.Push(rowsIterator);
                 
                 
-                for (Node j = rowsIterator.Right; j != rowsIterator; j = j.Right)
+                for (Node rowIterator = rowsIterator.Right; rowIterator != rowsIterator; rowIterator = rowIterator.Right)
                 {
-                    j.Header.Cover();
+                    //removes the columns that are in this row
+                    rowIterator.Header.Cover();
                 }
                 //recursivly continues on the search for a solution
                 if (Search() == true)
@@ -112,13 +116,16 @@ namespace SudokuSolver2.DLXSolver
                 rowsIterator = result.Pop();
                 minColumn = rowsIterator.Header;
 
-                for (Node j = rowsIterator.Left; j != rowsIterator; j = j.Left)
+                for (Node rowIterator = rowsIterator.Left; rowIterator != rowsIterator; rowIterator = rowIterator.Left)
                 {
-                    j.Header.UnCover();
+                    //retores the columns
+                    rowIterator.Header.UnCover();
                 }
             }
+            //retores the column
             minColumn.UnCover();
-        
+
+            //if no sulition was found on this path
             return false;
 
         }

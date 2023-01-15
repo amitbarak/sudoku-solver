@@ -10,23 +10,32 @@ namespace SudokuSolver2.DLXSolver
 {
 
     /// <summary>
+    /// This class is used to convert a sudoku board to a corrospinding DLX structure
+    /// </summary>
+    /// <remarks>
+    /// 
     /// This class is used to convert a sudoku board into:
     /// a matrix of 1's and 0's.
-    /// However! the matrix is represented by
+    /// However! the matrix is represented by:
     /// A Quadripley lincked list of nodes. And not by a 2D array.
     /// the Quadripley lincked list will later be used to solve the sudoku board
-    /// </summary>
+    /// </remarks>
     public class DLXConvertor
     {
-        
-        public ColumnNode h;
-        public Board board;
-        
-        //create the DLX convertor
-        public DLXConvertor(Board board, ColumnNode h)
+        //The node before all nodes
+        public ColumnNode StaterNode;
+        //A board object to convert into a DLX structure
+        public Board Board;
+
+        /// <summary>
+        /// This is the constructor of the class
+        /// </summary>
+        /// <param name="board">A board to create a DLX structure from</param>
+        /// <param name="starterNode">A starter node </param>
+        public DLXConvertor(Board board, ColumnNode starterNode)
         {
-            this.h = h;
-            this.board = board;
+            this.StaterNode = starterNode;
+            this.Board = board;
         }
 
         /// <summary>
@@ -38,7 +47,7 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetCellConstraintIndex(int colIndex, int rowIndex)
         {
-            return colIndex * board.rowSize + rowIndex;
+            return colIndex * Board.rowSize + rowIndex;
         }
 
         /// <summary>
@@ -49,7 +58,7 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetRowConstraintIndex(int rowIndex, int CellValue)
         {
-            return board.cellsNumber + rowIndex * board.rowSize + CellValue - 1;
+            return Board.cellsNumber + rowIndex * Board.rowSize + CellValue - 1;
         }
 
 
@@ -61,7 +70,7 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetColConstraintIndex(int colIndex, int CellValue)
         {
-            return board.cellsNumber * 2 + colIndex * board.rowSize + CellValue - 1;
+            return Board.cellsNumber * 2 + colIndex * Board.rowSize + CellValue - 1;
         }
 
 
@@ -74,8 +83,8 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetSqrConstraintIndex(int colIndex, int rowIndex, int CellValue)
         {
-            return (board.cellsNumber) * 3 + (board.nonetSize * (colIndex / board.nonetSize)
-                + rowIndex / board.nonetSize) * board.rowSize + CellValue - 1;
+            return (Board.cellsNumber) * 3 + (Board.nonetSize * (colIndex / Board.nonetSize)
+                + rowIndex / Board.nonetSize) * Board.rowSize + CellValue - 1;
         }
 
         /// <summary>
@@ -125,7 +134,7 @@ namespace SudokuSolver2.DLXSolver
         }
 
         /// <summary>
-        /// creates 
+        /// Creates rows in the matrix for each value that could be in that cell
         /// </summary>
         /// <param name="HeadersArr"></param>
         /// <param name="colIndex"></param>
@@ -134,7 +143,7 @@ namespace SudokuSolver2.DLXSolver
             int colIndex, int rowIndex)
         {
 
-            for (int cellValue = 1; cellValue <= board.rowSize; cellValue++)
+            for (int cellValue = 1; cellValue <= Board.rowSize; cellValue++)
             {
                 CreateRow(HeadersArr, new OptionPoint(colIndex, rowIndex, cellValue));
             }
@@ -143,7 +152,7 @@ namespace SudokuSolver2.DLXSolver
 
         public ColumnNode createLinkedList()
         {
-            ColumnNode[] HeadersArr = new ColumnNode[board.cellsNumber * 4];
+            ColumnNode[] HeadersArr = new ColumnNode[Board.cellsNumber * 4];
 
             //in this for loop we create the maximun number of columns
             // that could be used
@@ -152,7 +161,7 @@ namespace SudokuSolver2.DLXSolver
             {
                 ColumnNode col = new ColumnNode(col_ind);
                 //insert a node before the former node
-                col.addToRightByRow(h);
+                col.addToRightByRow(StaterNode);
 
                 //add to the columns list
                 HeadersArr[col_ind] = col;
@@ -160,12 +169,12 @@ namespace SudokuSolver2.DLXSolver
             Cell currentCell;
             OptionPoint currentOption;
             //in this for loop we create the nodes for the rows
-            for (int colIndex = 0; colIndex < board.rowSize; colIndex++)
+            for (int colIndex = 0; colIndex < Board.rowSize; colIndex++)
             {
-                for (int rowIndex = 0; rowIndex < board.rowSize; rowIndex++)
+                for (int rowIndex = 0; rowIndex < Board.rowSize; rowIndex++)
                 {
 
-                    currentCell = board.getElement(colIndex, rowIndex);
+                    currentCell = Board.getElement(colIndex, rowIndex);
                     if (currentCell.IsEmpty())
                     {
                         CreateRows(HeadersArr, colIndex, rowIndex);
@@ -178,7 +187,7 @@ namespace SudokuSolver2.DLXSolver
                 }         
             }
             
-            return h;
+            return StaterNode;
         }
 
     }

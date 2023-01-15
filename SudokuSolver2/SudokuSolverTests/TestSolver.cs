@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System;
 using SudokuSolver2;
+using SudokuSolver2.DLXSolver;
 
 namespace SudokuSolverTests
 {
@@ -16,10 +17,10 @@ namespace SudokuSolverTests
 
 
             //act
-            var result = Solver.Solve(board);
+            var result = DancingLinksSolver.Solve(board);
 
             //assert
-            Assert.IsTrue(result);
+            Assert.IsTrue(result.isValid());
         }
 
         [TestMethod]
@@ -30,25 +31,25 @@ namespace SudokuSolverTests
 
 
             //act
-            var result = Solver.Solve(board);
-            Console.WriteLine("hi3");
+            var result = DancingLinksSolver.Solve(board);
+
             //assert
-            Assert.IsTrue(result);
+            Assert.IsTrue(result.isValid());
         }
 
 
         [TestMethod]
         public void Solve_UnSolvebleBoard9x9_ReaturnsFalse()
         {
-            //Arange    
+            //Arange
             var board = new Board("850000124720000890004000701600090004100820000000060100000502000000705600620000407");
 
 
             //act
-            var result = Solver.Solve(board);
+            var result = DancingLinksSolver.Solve(board);
 
             //assert
-            Assert.IsFalse(result);
+            Assert.IsFalse(result.isValid());
         }
 
 
