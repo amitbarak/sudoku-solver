@@ -16,7 +16,7 @@ namespace SudokuSolver2.DLXSolver.DLXObjects
     /// of one. A node has a reference to the column it is in,
     /// and a reference to the Posibility the row of the node represents is in.
     /// </remarks>
-    internal class Node
+    public class Node
     {
         //the nodes of all four sides of this node
         public Node Left, Right, Up, Down;

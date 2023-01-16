@@ -32,7 +32,7 @@ namespace SudokuSolver2.DLXSolver
         public static Board? Solve(Board board)
         {
             //creates a Column node before all nodes in the matrix
-            ColumnNode starterNode = new ColumnNode();
+            ColumnNode starterNode = new();
             //convertor is used to convert the board to a DLX matrix
             DLXConvertor convertor = new(board, starterNode);
             convertor.createLinkedList();

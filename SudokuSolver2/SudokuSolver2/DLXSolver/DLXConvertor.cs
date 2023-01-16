@@ -18,8 +18,8 @@ namespace SudokuSolver2.DLXSolver
     /// This class is used to convert a sudoku board into:
     /// a matrix of 1's and 0's.
     /// However! the matrix is represented by:
-    /// A Quadripley lincked list of nodes. And not by a 2D array.
-    /// the Quadripley lincked list will later be used to solve the sudoku board
+    /// A Quadripley linked list of nodes. And not by a 2D array.
+    /// the Quadripley linked list will later be used to solve the sudoku board
     /// </remarks>
     public class DLXConvertor
     {
@@ -166,7 +166,7 @@ namespace SudokuSolver2.DLXSolver
             //there are 4 constraints so its the input length * 4
             for (int col_ind = 0; col_ind < HeadersArr.Length; col_ind++)
             {
-                ColumnNode col = new ColumnNode();
+                ColumnNode col = new();
                 //insert a node after the former node
                 col.AddToEnd(StaterNode);
 

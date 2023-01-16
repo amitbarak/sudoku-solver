@@ -12,7 +12,7 @@ namespace SudokuSolver2.IOs
     //This class is used to write output to the console.
     //</summery>
 
-    internal class ConsoleHandler : IInputOutput
+    public class ConsoleHandler : IInputOutput
     {
         public static int bufferSize = 4096;
 

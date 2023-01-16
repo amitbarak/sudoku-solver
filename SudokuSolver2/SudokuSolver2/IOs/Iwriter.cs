@@ -9,7 +9,7 @@ namespace SudokuSolver2.IOs
     ///<summery>
     ///This interface is used to write output.
     ///</summery>
-    internal interface IWriter
+    public interface IWriter
     {
         /// <summary>
         /// This method is used to write a line.

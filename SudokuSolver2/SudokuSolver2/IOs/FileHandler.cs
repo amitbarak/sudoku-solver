@@ -10,7 +10,7 @@ namespace SudokuSolver2.IOs
     ///<summery>
     ///This class is used to read and write output to files.
     ///</summery>
-    internal class FileHandler : IInputOutput
+    public class FileHandler : IInputOutput
     {
 
         //the adress of the file

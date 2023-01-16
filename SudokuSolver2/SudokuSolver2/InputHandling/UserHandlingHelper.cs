@@ -23,9 +23,11 @@ namespace SudokuSolver2.InputHandling
         /// <returns></returns>
         public static List<IWriter> SetOutputList()
         {
-            ConsoleHandler consoleHandler = new ConsoleHandler();
-            List<IWriter> resultWriters = new List<IWriter>();
-            resultWriters.Add(consoleHandler);
+            ConsoleHandler consoleHandler = new();
+            List<IWriter> resultWriters = new()
+            {
+                consoleHandler
+            };
             consoleHandler.WriteLine("do you want to save the board in a file?");
             consoleHandler.WriteLine("type f for file or enter otherwise:");
             string answer = "";
@@ -75,7 +77,7 @@ namespace SudokuSolver2.InputHandling
                 WriteToAll(resultWriters, GeneralValues.ErrorMessage);
                 return;
             }
-            Board board = new Board(input);
+            Board board = new(input);
 
             //Console.WriteLine(board); //this line is very usefull for debugging
 

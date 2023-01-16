@@ -12,7 +12,7 @@ namespace SudokuSolver2.IOs
     /// This interface is used to define the methods
     /// that are used to read and write the sudoku.
     /// </summary>
-    internal interface IInputOutput : IReader, IWriter
+    public interface IInputOutput : IReader, IWriter
     {
 
     }

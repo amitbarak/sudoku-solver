@@ -35,7 +35,6 @@ namespace SudokuSolver2.InputHandling
             {
                 //clears the console
                 consoleHandler.Clear();
-                Console.WriteLine("C:\\Users\\USER-HP1\\Downloads\\sudoku_example (2).txt");
                 //gets the input from the user
                 input = UserHandlingHelper.GetInput(consoleHandler);
                 //sets a list of writers to write the result to (for example console and file)
@@ -48,7 +47,7 @@ namespace SudokuSolver2.InputHandling
                 //validates and handles the input
                 UserHandlingHelper.HandleInput(input, resultWriters);
 
-
+                //waits for the user to press enter
                 UserHandlingHelper.Wait(consoleHandler);
             }
         }
