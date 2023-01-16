@@ -1,4 +1,5 @@
-﻿using SudokuSolver2.DLXSolver;
+﻿using SudokuSolver2.BoardObjects;
+using SudokuSolver2.DLXSolver.DLXObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,27 +9,49 @@ using System.Threading.Tasks;
 
 namespace SudokuSolver2.DLXSolver
 {
+    /// <summary>
+    /// This class is used to solve a sudoku puzzle using the DLX algorithm.
+    /// </summary>
+    /// <remarks>
+    /// This class is used to solve a sudoku puzzle using the DLX algorithm.
+    /// it contains a method to solve a sudoku puzzle.
+    /// </remarks>
     public class DancingLinksSolver
     {
+        /// <summary>
+        /// This method is used to solve a sudoku puzzle using the DLX algorithm.
+        /// </summary>
+        /// <param name="board">
+        /// 
+        /// </param>
+        /// <returns>
+        /// a solved board if the board is solveble,
+        /// null if the board is unsolveble.
+        /// </returns>
 
         public static Board? Solve(Board board)
         {
-            ColumnNode starterNode = new ColumnNode(-1);
-            DLXConvertor convertor = new DLXConvertor(board, starterNode);
+            //creates a Column node before all nodes in the matrix
+            ColumnNode starterNode = new ColumnNode();
+            //convertor is used to convert the board to a DLX matrix
+            DLXConvertor convertor = new(board, starterNode);
             convertor.createLinkedList();
-            AlgorithmX alg = new AlgorithmX(starterNode);
+
+            //creates a new AlgorithmX object
+            AlgorithmX alg = new(starterNode);
+
+            //solves the sudoku puzzle
             if (alg.Search())
             {
+                //returns the soluition if it was found
                 return alg.getSolution();
             }
             else
             {
+                //returns null if the solution was not found
                 return null;
             }
             
         }
     }
-
-    
-    
 }

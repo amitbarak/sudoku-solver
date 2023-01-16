@@ -5,23 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver2
+namespace SudokuSolver2.IOs
 {
 
     //<summery>
     //This class is used to write output to the console.
     //</summery>
 
-    public class ConsoleHandler : IInputOutput
+    internal class ConsoleHandler : IInputOutput
     {
         public static int bufferSize = 4096;
 
 
-        //<summery>
-        //setter is used increase the number of chars the console can accept.
-        //</summery>
-        //<param></param>
-        //<returns></returns>
+        ///<summery>
+        ///setter is used increase the number of chars the console can accept.
+        ///</summery>
         public ConsoleHandler()
         {
             Console.SetIn(new StreamReader(Console.OpenStandardInput(bufferSize)));
@@ -31,7 +29,7 @@ namespace SudokuSolver2
         ///This method is used to write output to the console.
         /// </summery>
         /// <param name="output"> output to the console </param>
-        public void Write(String output)
+        public void WriteLine(string output)
         {
             Console.WriteLine(output);
         }
@@ -42,14 +40,40 @@ namespace SudokuSolver2
         /// </summery>
         /// <param ></param>
         /// <returns> the line read from the console </returns>
-        public String Read()
+        public string ReadLine()
         {
-            String? input = Console.ReadLine();
+            string? input = Console.ReadLine();
             if (input == null || input.Equals(""))
             {
                 throw new IOException();
             }
             return input;
+        }
+
+
+        ///<summery>
+        ///This method is used to read lines from the console.
+        ///Without raising error on empty input.
+        /// </summery>
+        /// <param ></param>
+        /// <returns> the line read from the console </returns>
+        public string ReadEmpty()
+        {
+            string? input = Console.ReadLine();
+            if (input == null)
+            {
+                throw new IOException();
+            }
+            return input;
+        }
+
+
+        /// <summary>
+        /// clears the console
+        /// </summary>
+        public void Clear()
+        {
+            Console.Clear();
         }
     }
 }

@@ -3,40 +3,56 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-namespace SudokuSolver2
+namespace SudokuSolver2.BoardObjects
 {
-
+    /// <summary>
+    /// A Class that represents a single board
+    /// </summary>
     public class Board
     {
-        public int cellsNumber;
-        public int rowSize { get; private set; }
-        public Cell[,] grid { get; set; }
-        public int nonetSize { get; private set; }
+        //the number of cells in the board
+        public int CellsNumber { get; private set; }
+        //the size of the board
+        public int RowSize { get; private set; }
+        //A cells array with the cells of the board
+        public Cell[,] Grid { get; set; }
+        //the size of a block/square/nonet in the board
+        public int NonetSize { get; private set; }
 
+        /// <summary>
+        /// constructor that accepts a string
+        /// </summary>
+        /// <param name="grid">two dimentional array that represents a board</param>
         public Board(int[,] grid)
         {
+            //set the correct sizes of the board
+            RowSize = grid.GetLength(0);
+            GeneralValues.acceptedSize = RowSize;
+            NonetSize = (int)Math.Sqrt(RowSize);
+            Grid = new Cell[RowSize, RowSize];
 
-            this.rowSize = (int)Math.Sqrt(grid.GetLength(0) * grid.GetLength(1));
-            GeneralValues.acceptedSize = rowSize;
-            this.nonetSize = (int)Math.Sqrt(rowSize);
-            this.grid = new Cell[rowSize, rowSize];
+            //insert the values to the board
             for (int col = 0; col < grid.GetLength(0); col++)
             {
                 for (int row = 0; row < grid.GetLength(1); row++)
                 {
-                    this.grid[col, row] = new Cell(grid[col, row]);
+                    Grid[col, row] = new Cell(grid[col, row]);
                 }
             }
 
-            this.cellsNumber = rowSize * rowSize;
+            CellsNumber = RowSize * RowSize;
         }
 
+        /// <summary>
+        /// Constructor for the board
+        /// </summary>
+        /// <param name="grid">two dimentional array of Cells</param>
         public Board(Cell[,] grid)
         {
-            this.grid = grid;
-            this.rowSize = grid.GetLength(0);
-            this.nonetSize = (int)Math.Sqrt(rowSize);
-            this.cellsNumber = rowSize * rowSize;
+            Grid = grid;
+            RowSize = grid.GetLength(0);
+            NonetSize = (int)Math.Sqrt(RowSize);
+            CellsNumber = RowSize * RowSize;
         }
 
 
@@ -45,33 +61,36 @@ namespace SudokuSolver2
         /// recives the input and creates a corrosponding matrix board
         /// </summary>
         /// <param name="contents">the string contents the board will be created from</param>
-        public Board(String contents)
+        public Board(string contents)
         {
-            this.rowSize = (int)Math.Sqrt(contents.Length);
-            GeneralValues.acceptedSize = rowSize;
-            this.nonetSize = (int)Math.Sqrt(rowSize);
-            this.grid = new Cell[rowSize, rowSize];
-            for (int col = 0; col < rowSize; col++)
+            //sets the correct sizes of the board
+            RowSize = (int)Math.Sqrt(contents.Length);
+            GeneralValues.acceptedSize = RowSize;
+            NonetSize = (int)Math.Sqrt(RowSize);
+            Grid = new Cell[RowSize, RowSize];
+
+            //sets the values of the board
+            for (int col = 0; col < RowSize; col++)
             {
-                for (int row = 0; row < rowSize; row++)
+                for (int row = 0; row < RowSize; row++)
                 {
-                    this.grid[col, row] = new Cell(contents[col + row * rowSize]);
+                    Grid[col, row] = new Cell(contents[col + row * RowSize]);
                 }
             }
 
-            this.cellsNumber = rowSize * rowSize;
+            CellsNumber = RowSize * RowSize;
         }
 
 
         /// <summary>
-        /// returns an element from the board
+        /// returns an element from the board at index: col, row
         /// </summary>
         /// <param name="col">column index</param>
         /// <param name="row">row index</param>
         /// <returns></returns>
-        public Cell getElement(int col, int row)
+        public Cell GetElement(int col, int row)
         {
-            return this.grid[col, row];
+            return Grid[col, row];
         }
 
         /// <summary>
@@ -80,9 +99,9 @@ namespace SudokuSolver2
         /// <param name="col">int column index</param>
         /// <param name="row">int row index</param>
         /// <param name="element">Cell</param>
-        public void setPos(int col, int row, Cell element)
+        public void SetPos(int col, int row, Cell element)
         {
-            this.grid[col, row] = element;
+            Grid[col, row] = element;
         }
 
         /// <summary>
@@ -91,9 +110,9 @@ namespace SudokuSolver2
         /// <param name="col">culomn index</param>
         /// <param name="row">row index</param>
         /// <param name="element">int element</param>
-        public void setPos(int col, int row, int element)
+        public void SetPos(int col, int row, int element)
         {
-            this.grid[col, row] = new Cell(element);
+            Grid[col, row] = new Cell(element);
         }
 
 
@@ -102,43 +121,43 @@ namespace SudokuSolver2
         /// checks the validity of the board (for example that there aren't two of the same number in the same row)
         /// </summary>
         /// <returns>true if board is valid, false otherwise</returns>
-        public bool isValid()
+        public bool IsValid()
         {
             int tempValue = 0;
             //iterate the board cells
-            for (int col = 0; col < rowSize; col++)
+            for (int col = 0; col < RowSize; col++)
             {
-                for (int row = 0; row < rowSize; row++)
+                for (int row = 0; row < RowSize; row++)
                 {
                     //check the validity of the cell
-                    tempValue = grid[col, row].element;
-                    grid[col, row].element = 0;
+                    tempValue = Grid[col, row].Element;
+                    Grid[col, row].Element = 0;
                     if (tempValue != 0 && !CheckPlacement(tempValue, col, row))
                     {
                         return false;
                     }
-                    grid[col, row].element = tempValue;
+                    Grid[col, row].Element = tempValue;
                 }
             }
             return true;
         }
 
-        
+
 
         /// <summary>
         /// toString of the board. prints if nicely
         /// </summary>
-        /// <returns>string of the object</returns>
+        /// <returns>string of the Board</returns>
         public override string ToString()
         {
             StringBuilder representation = new StringBuilder();
             int lineLength = 0;
-            for (int i = 0; i < rowSize; i++)
+            for (int i = 0; i < RowSize; i++)
             {
-                for (int j = 0; j < rowSize; j++)
+                for (int j = 0; j < RowSize; j++)
                 {
-                    representation.Append(grid[j, i]);
-                    lineLength += grid[j, i].ToString().Length;
+                    representation.Append(Grid[j, i]);
+                    lineLength += Grid[j, i].ToString().Length;
                 }
                 representation.Append("\n");
                 for (int j = 0; j < lineLength; j++)
@@ -163,10 +182,10 @@ namespace SudokuSolver2
         private bool CheckPlacement(int element, int col, int row)
         {
             //checks for the same values in the same row and column
-            for (int i = 0; i < this.rowSize; i++)
+            for (int i = 0; i < RowSize; i++)
             {
-                if (grid[col, i].element == element
-                    || grid[col, i].element == element)
+                if (Grid[col, i].Element == element
+                    || Grid[col, i].Element == element)
 
                     return false;
             }
@@ -180,7 +199,6 @@ namespace SudokuSolver2
         /// <param name="col">column index</param>
         /// <param name="row">row index</param>
         /// <returns></returns>
-
         private bool CheckNonetes(int element, int col, int row)
         {
             int startCol = GetNonetStartCol(col);
@@ -192,7 +210,7 @@ namespace SudokuSolver2
             {
                 for (int j = startRow; j < EndRow; j++)
                 {
-                    if (grid[col, i].element == element)
+                    if (Grid[col, i].Element == element)
                         return false;
                 }
             }
@@ -207,7 +225,7 @@ namespace SudokuSolver2
         /// <returns></returns>
         private int GetNonetStartCol(int col)
         {
-            return (col / this.nonetSize) * this.nonetSize;
+            return col / NonetSize * NonetSize;
         }
 
 
@@ -218,7 +236,7 @@ namespace SudokuSolver2
         /// <returns></returns>
         private int GetNonetStartRow(int row)
         {
-            return (row / this.nonetSize) * this.nonetSize;
+            return row / NonetSize * NonetSize;
         }
 
 
@@ -226,20 +244,20 @@ namespace SudokuSolver2
         /// returns the ending column index of the Nonet
         /// </summary>
         /// <param name="col">column index</param>
-        /// <returns></returns>
+        /// <returns>the ending column index of the Nonet</returns>
         private int GetNonetEndCol(int col)
         {
-            return (col / this.nonetSize) * this.nonetSize + this.nonetSize;
+            return col / NonetSize * NonetSize + NonetSize;
         }
 
         /// <summary>
-        /// returns the index of the end row
+        /// returns the index of the end row in the Nonet
         /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
+        /// <param name="row">row index</param>
+        /// <returns>the ending row index of the Nonet</returns>
         private int GetNonetEndRow(int row)
         {
-            return (row / this.nonetSize) * this.nonetSize + this.nonetSize;
+            return row / NonetSize * NonetSize + NonetSize;
         }
     }
 

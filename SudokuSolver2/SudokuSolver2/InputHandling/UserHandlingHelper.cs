@@ -4,14 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SudokuSolver2.BoardObjects;
+using SudokuSolver2.IOs;
 
-namespace SudokuSolver2
+namespace SudokuSolver2.InputHandling
 {
-    internal class userHandlingHelper
+    /// <summary>
+    /// This class is used to handle the user input and output.
+    /// </summary>
+    public class UserHandlingHelper
     {
 
-        static readonly Stopwatch timer = new Stopwatch();
-        
+        static readonly Stopwatch timer = new();
+
         /// <summary>
         /// sets the List of writers the program should output to
         /// </summary>
@@ -21,12 +26,12 @@ namespace SudokuSolver2
             ConsoleHandler consoleHandler = new ConsoleHandler();
             List<IWriter> resultWriters = new List<IWriter>();
             resultWriters.Add(consoleHandler);
-            consoleHandler.Write("do you want to save the board in a file?");
-            consoleHandler.Write("type f for file or enter otherwise:");
-            String answer = "";
+            consoleHandler.WriteLine("do you want to save the board in a file?");
+            consoleHandler.WriteLine("type f for file or enter otherwise:");
+            string answer = "";
             try
             {
-                answer = consoleHandler.Read();
+                answer = consoleHandler.ReadLine();
             }
 
             //the user has not typed f
@@ -36,11 +41,11 @@ namespace SudokuSolver2
             //file was selected
             if (answer == "f")
             {
-                consoleHandler.Write("type the address of the file this will go into:");
-                String address;
+                consoleHandler.WriteLine("type the address of the file this will go into:");
+                string address;
                 try
                 {
-                    address = consoleHandler.Read();
+                    address = consoleHandler.ReadLine();
                 }
 
                 //the user has not typed f
@@ -51,7 +56,7 @@ namespace SudokuSolver2
                 outputFile = new FileHandler(address);
                 resultWriters.Add(outputFile);
             }
-            consoleHandler.Write("");
+            consoleHandler.WriteLine("");
             return resultWriters;
         }
 
@@ -63,11 +68,11 @@ namespace SudokuSolver2
         /// </summary>
         /// <param name="input">a string that represents a board</param>
         /// <param name="resultWriters">writers to print the result</param>
-        public static void handleInput(String input, List<IWriter> resultWriters)
+        public static void HandleInput(string input, List<IWriter> resultWriters)
         {
             if (!InputValidation.IsValid(input))
             {
-                writeToAll(resultWriters, GeneralValues.error_message);
+                WriteToAll(resultWriters, GeneralValues.ErrorMessage);
                 return;
             }
             Board board = new Board(input);
@@ -87,15 +92,15 @@ namespace SudokuSolver2
         public static void SolveAndPrint(Board board, List<IWriter> outputList)
         {
             //checking the board is valid
-            if (!board.isValid())
+            if (!board.IsValid())
             {
-                writeToAll(outputList, "board is not valid");
+                WriteToAll(outputList, "board is not valid");
             }
             timer.Restart();
             Board? solution = DLXSolver.DancingLinksSolver.Solve(board);
             Console.WriteLine("miliseconds:" + timer.ElapsedMilliseconds.ToString());
             timer.Stop();
-            String outPut = "";
+            string outPut = "";
             if (solution != null)
             {
                 outPut = solution.ToString();
@@ -104,7 +109,7 @@ namespace SudokuSolver2
             {
                 outPut = "board is unsolvable";
             }
-            writeToAll(outputList, outPut);
+            WriteToAll(outputList, outPut);
 
 
 
@@ -116,15 +121,15 @@ namespace SudokuSolver2
         /// </summary>
         /// <param name="outputList">a list of outputs</param>
         /// <param name="outPut">String to output</param>
-        public static void writeToAll(List<IWriter> outputList, String outPut)
+        public static void WriteToAll(List<IWriter> outputList, string outPut)
         {
             foreach (IWriter writer in outputList)
             {
                 try
                 {
-                    writer.Write(outPut);
+                    writer.WriteLine(outPut);
                 }
-                catch (System.IO.IOException)
+                catch (IOException)
                 {
                     ConsoleHandler c = new ConsoleHandler();
                     Console.Write("could not write to your chosen output method");
@@ -138,17 +143,17 @@ namespace SudokuSolver2
         /// </summary>
         /// <param name="IOhandler">an input output handler with a valid writing method</param>
         /// <returns></returns>
-        public static String getInput(IInputOutput IOhandler)
+        public static string GetInput(IInputOutput IOhandler)
         {
-            String answer;
-            String input = "";
+            string answer;
+            string input = "";
             while (input.Equals(""))
             {
-                IOhandler.Write("where should the board be taken from?");
-                IOhandler.Write("c for console, f for file");
+                IOhandler.WriteLine("where should the board be taken from?");
+                IOhandler.WriteLine("c for console, f for file");
                 try
                 {
-                    answer = IOhandler.Read();
+                    answer = IOhandler.ReadLine();
                 }
                 catch (Exception e) when (e is IOException)
                 {
@@ -159,10 +164,10 @@ namespace SudokuSolver2
                 //if the user wanted to get input from the console
                 if (answer == "c")
                 {
-                    IOhandler.Write("type the board");
+                    IOhandler.WriteLine("type the board");
                     try
                     {
-                        input = IOhandler.Read();
+                        input = IOhandler.ReadLine();
                     }
                     catch (Exception e) when (e is IOException)
                     {
@@ -174,30 +179,45 @@ namespace SudokuSolver2
                 //if the user wanted to get input from a file
                 else if (answer == "f")
                 {
-                    IOhandler.Write("please type the address:");
+                    IOhandler.WriteLine("please type the address:");
                     try
                     {
-                        String address = IOhandler.Read();
+                        string address = IOhandler.ReadLine();
                         FileHandler f = new FileHandler(address);
-                        input = f.Read();
+                        input = f.ReadLine();
                     }
                     catch (Exception e) when (
                     e is IOException
                     )
                     {
-                        IOhandler.Write("encounterd problems when reading the file");
+                        IOhandler.WriteLine("encounterd problems when reading the file");
                         input = "";
                     }
                 }
                 //invalid input
                 else
                 {
-                    IOhandler.Write("wrong input, please type c or f");
+                    IOhandler.WriteLine("wrong input, please type c or f");
                 }
             }
 
 
             return input;
         }
+
+
+
+        /// <summary>
+        /// waites for the user to press enter and writes hum that
+        /// </summary>
+        /// <param name="consoleHandler"></param>
+        public static void Wait(ConsoleHandler consoleHandler)
+        {
+
+            consoleHandler.WriteLine("press enter to continue");
+            consoleHandler.ReadEmpty();
+        }
     }
+
+
 }

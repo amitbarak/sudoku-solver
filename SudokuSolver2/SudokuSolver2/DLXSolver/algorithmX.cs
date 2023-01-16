@@ -1,4 +1,5 @@
-﻿using SudokuSolver2.DLXSolver;
+﻿using SudokuSolver2.BoardObjects;
+using SudokuSolver2.DLXSolver.DLXObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace SudokuSolver2.DLXSolver
     public class AlgorithmX
     {
 
-        public ColumnNode header;
-        public Stack<Node> result = new Stack<Node>();
+        private readonly ColumnNode StarterNode;
+        private readonly Stack<Node> Result = new();
 
         /// <summary>
         /// creates a list of all the columns in the matrix.
@@ -26,7 +27,7 @@ namespace SudokuSolver2.DLXSolver
         /// before all ColumnNodes</param>
         public AlgorithmX(ColumnNode starterNode)
         {
-            header = starterNode;
+            StarterNode = starterNode;
         }
 
 
@@ -39,11 +40,11 @@ namespace SudokuSolver2.DLXSolver
         {
             
 
-            int rowSize = (int)Math.Sqrt(result.Count());
+            int rowSize = (int)Math.Sqrt(Result.Count());
 
             //getting a list of all of the ID's
             int[,] finalGrid = new int[rowSize, rowSize];
-            foreach (Node cellID in result)
+            foreach (Node cellID in Result)
             {
                 finalGrid[cellID.Possibility.Column, cellID.Possibility.Row] = cellID.Possibility.CellValue;
             }
@@ -59,9 +60,10 @@ namespace SudokuSolver2.DLXSolver
         /// <returns>returns the culomn with the least number of nodes</returns>
         public ColumnNode getMinCol()
         {
-            ColumnNode j = (ColumnNode)header.Right;
+            ColumnNode j = (ColumnNode)StarterNode.Right;
             ColumnNode minCol = j;
-            while (j != header)
+            //iterate through all columns to find the minimum column
+            while (j != StarterNode)
             {
                 if (j.Size < minCol.Size)
                 {
@@ -85,7 +87,7 @@ namespace SudokuSolver2.DLXSolver
         public bool Search()
         {
             //if the matrix has no columns, then the solution is found
-            if (header.Right == header)
+            if (StarterNode.Right == StarterNode)
                 return true;
 
             //get the column with the least number of nodes and cover it
@@ -96,7 +98,7 @@ namespace SudokuSolver2.DLXSolver
             for (Node rowsIterator = minColumn.Down; rowsIterator != minColumn; rowsIterator = rowsIterator.Down)
             {
                 //includes the rowsIterator in the solution
-                result.Push(rowsIterator);
+                Result.Push(rowsIterator);
                 
                 
                 for (Node rowIterator = rowsIterator.Right; rowIterator != rowsIterator; rowIterator = rowIterator.Right)
@@ -113,7 +115,7 @@ namespace SudokuSolver2.DLXSolver
                 //then the rowsIterator is removed from the result
                 // and all of the nodes that were covered, will be uncovered
                 
-                rowsIterator = result.Pop();
+                rowsIterator = Result.Pop();
                 minColumn = rowsIterator.Header;
 
                 for (Node rowIterator = rowsIterator.Left; rowIterator != rowsIterator; rowIterator = rowIterator.Left)

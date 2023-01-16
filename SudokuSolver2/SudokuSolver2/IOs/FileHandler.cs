@@ -4,38 +4,38 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace SudokuSolver2
+namespace SudokuSolver2.IOs
 {
 
     ///<summery>
     ///This class is used to read and write output to files.
     ///</summery>
-    public class FileHandler : IInputOutput
+    internal class FileHandler : IInputOutput
     {
 
         //the adress of the file
-        public String address { get; set; }
+        public string Address { get; set; }
 
 
         /// <summary>
         /// creates a new FileHandler object
         /// </summary>
         /// <param name="address">a string with the adress of the file</param>
-        public FileHandler(String address)
+        public FileHandler(string address)
         {
-            this.address = address;
+            this.Address = address;
         }
 
         ///<summery>
         ///This method is used to write output to a file.
         ///</summery>
         ///<param name="output">The output to be written.</param>
-        public void Write(String output)
+        public void WriteLine(string output)
         {
-            if (!File.Exists(address))
-                throw new System.IO.FileNotFoundException();
-            FileStream fs = new FileStream(address, FileMode.Append, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(fs);
+            if (!File.Exists(Address))
+                throw new FileNotFoundException();
+            FileStream fs = new(Address, FileMode.Append, FileAccess.Write);
+            StreamWriter sw = new(fs);
             sw.WriteLine(output);
             sw.Flush();
             sw.Close();
@@ -48,15 +48,15 @@ namespace SudokuSolver2
         ///</summery>
         ///<param></param>
         ///<returns>the line read from the console</returns>
-        public String Read()
+        public string ReadLine()
         {
             try
             {
-                FileStream fs = new FileStream(address, FileMode.Open, FileAccess.Read);
-                StreamReader sr = new StreamReader(fs);
+                FileStream fs = new(Address, FileMode.Open, FileAccess.Read);
+                StreamReader sr = new(fs);
                 sr.BaseStream.Seek(0, SeekOrigin.Begin);
 #pragma warning disable CS8600
-                String input = sr.ReadLine(); //this warning is being handled at the catch
+                string input = sr.ReadLine(); //this warning is being handled at the catch
 #pragma warning restore CS8600 
                 sr.Close();
                 fs.Close();

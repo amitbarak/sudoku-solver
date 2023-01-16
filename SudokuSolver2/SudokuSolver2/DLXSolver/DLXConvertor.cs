@@ -1,4 +1,5 @@
-﻿using SudokuSolver2.DLXSolver;
+﻿using SudokuSolver2.BoardObjects;
+using SudokuSolver2.DLXSolver.DLXObjects;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -24,8 +25,13 @@ namespace SudokuSolver2.DLXSolver
     {
         //The node before all nodes
         public ColumnNode StaterNode;
+        
         //A board object to convert into a DLX structure
         public Board Board;
+        
+            
+        //The number of constraints
+        public const int ConstraintNumber = 4;
 
         /// <summary>
         /// This is the constructor of the class
@@ -47,7 +53,7 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetCellConstraintIndex(int colIndex, int rowIndex)
         {
-            return colIndex * Board.rowSize + rowIndex;
+            return colIndex * Board.RowSize + rowIndex;
         }
 
         /// <summary>
@@ -58,7 +64,7 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetRowConstraintIndex(int rowIndex, int CellValue)
         {
-            return Board.cellsNumber + rowIndex * Board.rowSize + CellValue - 1;
+            return Board.CellsNumber + rowIndex * Board.RowSize + CellValue - 1;
         }
 
 
@@ -70,7 +76,7 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetColConstraintIndex(int colIndex, int CellValue)
         {
-            return Board.cellsNumber * 2 + colIndex * Board.rowSize + CellValue - 1;
+            return Board.CellsNumber * 2 + colIndex * Board.RowSize + CellValue - 1;
         }
 
 
@@ -83,8 +89,8 @@ namespace SudokuSolver2.DLXSolver
         /// <returns></returns>
         public int GetSqrConstraintIndex(int colIndex, int rowIndex, int CellValue)
         {
-            return (Board.cellsNumber) * 3 + (Board.nonetSize * (colIndex / Board.nonetSize)
-                + rowIndex / Board.nonetSize) * Board.rowSize + CellValue - 1;
+            return (Board.CellsNumber) * 3 + (Board.NonetSize * (colIndex / Board.NonetSize)
+                + rowIndex / Board.NonetSize) * Board.RowSize + CellValue - 1;
         }
 
         /// <summary>
@@ -97,7 +103,7 @@ namespace SudokuSolver2.DLXSolver
         /// <param name="cellValue">a possible value for a cell in that position</param>
 
         public void CreateRow(ColumnNode[] HeadersArr,
-            OptionPoint option)
+            PossiblePoint option)
         {
             //index to the column node in the columnNodes array
             int indexInColList;
@@ -109,22 +115,22 @@ namespace SudokuSolver2.DLXSolver
             //creates a node for the Position/Cell constraint:
             //Only one number can occupy a cell
             indexInColList = GetCellConstraintIndex(option.Column, option.Row);
-            Node cell = new Node(HeadersArr[indexInColList], option);
+            Node cell = new(HeadersArr[indexInColList], option);
 
             //creates a node for the Row constraint:
             //Each row must contain all numbers once
             indexInColList = GetRowConstraintIndex(option.Row, option.CellValue);
-            Node row = new Node(HeadersArr[indexInColList], option);
+            Node row = new(HeadersArr[indexInColList], option);
 
             //creates a node for the column constraint:
             //Each column must contain all numbers once
             indexInColList = GetColConstraintIndex(option.Column, option.CellValue);
-            Node col = new Node(HeadersArr[indexInColList], option);
+            Node col = new(HeadersArr[indexInColList], option);
 
             //creates a node for the square constraint:
             //Each square must contain all numbers once (square = Nonet = 3x3 in reular sudoku)
             indexInColList = GetSqrConstraintIndex(option.Column, option.Row, option.CellValue);
-            Node sqr = new Node(HeadersArr[indexInColList], option);
+            Node sqr = new(HeadersArr[indexInColList], option);
 
             //links the nodes to each other as they are in the same row, and to their columns
             Node.LinkNodes(cell, row, col, sqr);
@@ -142,46 +148,49 @@ namespace SudokuSolver2.DLXSolver
         public void CreateRows(ColumnNode[] HeadersArr,
             int colIndex, int rowIndex)
         {
-
-            for (int cellValue = 1; cellValue <= Board.rowSize; cellValue++)
+            //iterate through all possible values and create a row (of nodes) for each
+            for (int cellValue = 1; cellValue <= Board.RowSize; cellValue++)
             {
-                CreateRow(HeadersArr, new OptionPoint(colIndex, rowIndex, cellValue));
+                CreateRow(HeadersArr, new PossiblePoint(colIndex, rowIndex, cellValue));
             }
         }
 
 
         public ColumnNode createLinkedList()
         {
-            ColumnNode[] HeadersArr = new ColumnNode[Board.cellsNumber * 4];
+            //creates an array of columnNodes in the size of the number of constraints
+            ColumnNode[] HeadersArr = new ColumnNode[Board.CellsNumber * ConstraintNumber];
 
             //in this for loop we create the maximun number of columns
             // that could be used
             //there are 4 constraints so its the input length * 4
             for (int col_ind = 0; col_ind < HeadersArr.Length; col_ind++)
             {
-                ColumnNode col = new ColumnNode(col_ind);
-                //insert a node before the former node
-                col.addToRightByRow(StaterNode);
+                ColumnNode col = new ColumnNode();
+                //insert a node after the former node
+                col.AddToEnd(StaterNode);
 
                 //add to the columns list
                 HeadersArr[col_ind] = col;
             }
             Cell currentCell;
-            OptionPoint currentOption;
+            PossiblePoint currentOption;
             //in this for loop we create the nodes for the rows
-            for (int colIndex = 0; colIndex < Board.rowSize; colIndex++)
+            for (int colIndex = 0; colIndex < Board.RowSize; colIndex++)
             {
-                for (int rowIndex = 0; rowIndex < Board.rowSize; rowIndex++)
+                for (int rowIndex = 0; rowIndex < Board.RowSize; rowIndex++)
                 {
 
-                    currentCell = Board.getElement(colIndex, rowIndex);
+                    currentCell = Board.GetElement(colIndex, rowIndex);
                     if (currentCell.IsEmpty())
                     {
+                        //if the cell is empty we create a row for each possible value
                         CreateRows(HeadersArr, colIndex, rowIndex);
                     }
                     else
                     {
-                        currentOption = new OptionPoint(colIndex, rowIndex, currentCell.element);
+                        //we create a row for the value that's in the cell
+                        currentOption = new PossiblePoint(colIndex, rowIndex, currentCell.Element);
                         CreateRow(HeadersArr, currentOption);
                     }
                 }         
