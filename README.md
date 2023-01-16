@@ -10,7 +10,7 @@ The solver converts a Sudoku problem to an exact cover problem. The board is rep
 - Square constraint column: represents the possibility of the row's value to exist in the square on the value's place.
 - Cell constraint column: represents the possibility of the row's value to exist in the cell on the value's place.
 
-NOTE: When encountering an unknown value in the accepted board, we put a row for each possibility. When encountering a known value in the accepted matrix, we put a single row with ones and empty rows for the non-exitante possibillity.
+NOTE: When encountering an unknown value in the accepted board, we put a row for each possibility. When encountering a known value in the accepted matrix, we put a single row with ones and empty rows for the non-existent possibillity.
 
 In my solution, I created a quadruply linked list that represents the exact cover matrix from the board without a middle stage of the former explained matrix. Each one is a node, and each zero doesn't get memory allocated to it. This linked list can be efficiently solved using a backtracking algorithm called Algorithm X.
 
