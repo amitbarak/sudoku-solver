@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver
+namespace SudokuSolver2.IOs
 {
 
     ///<summery>
@@ -12,6 +12,10 @@ namespace SudokuSolver
     ///</summery>
     public interface IReader
     {
-        String Read();
+        /// <summary>
+        /// This method is used to read a line.
+        /// </summary>
+        /// <returns>String that was read</returns>
+        string ReadLine();
     }
 }

@@ -4,13 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver
+namespace SudokuSolver2
 {
-    public static class GeneralValues
+
+    /// <summary>
+    /// a class to represent general values of the program
+    /// </summary>
+    internal static class GeneralValues
     {
-        public static String error_message = "";
+        // error message for the valdition
+        public static string ErrorMessage = "";
+        //the value of an empty char
         public static char emptyChar = '0';
+        //the accepted row size of the board which will be set by in Validition class
         public static int acceptedSize = -1;
-        public static int[] validLengths = { 1, 4, 16, 81, 256, 625 };
+        //the possible lengths of input
+        public static int[] validLengths = { 1, 16, 81, 256, 625 };
     }
 }

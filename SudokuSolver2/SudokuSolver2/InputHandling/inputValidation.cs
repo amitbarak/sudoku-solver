@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver
+namespace SudokuSolver2.InputHandling
 {
     /// <summary>
     /// this class is used to validate the input.
@@ -21,9 +21,9 @@ namespace SudokuSolver
         /// </summary>
         /// <param name="input">String input recived to the program.</param>
         /// <returns>returns true if the input is valid, false otherwise.</returns>
-        public static Boolean IsValid(String input)
+        public static bool IsValid(string input)
         {
-            Boolean valid = CheckLegth(input);
+            bool valid = CheckLegth(input);
             if (!valid)
             {
                 return false;
@@ -38,13 +38,13 @@ namespace SudokuSolver
         /// </summary>
         /// <param name="input">String input recived to the program</param>
         /// <returns>true if the chars are ok, false otherwise</returns>
-        public static Boolean CheckChars(String input)
+        public static bool CheckChars(string input)
         {
             foreach (char c in input)
             {
                 if (!validChars.Contains(c))
                 {
-                    GeneralValues.error_message = "invalid character: " + c;
+                    GeneralValues.ErrorMessage = "invalid character: " + c;
                     return false;
                 }
             }
@@ -56,12 +56,12 @@ namespace SudokuSolver
         /// </summary>
         /// <param name="input">String input recived to the program</param>
         /// <returns>true if the length is valid, false otherwise</returns>
-        public static Boolean CheckLegth(String input)
+        public static bool CheckLegth(string input)
         {
             GeneralValues.acceptedSize = (int)Math.Sqrt(input.Length);
             if (!GeneralValues.validLengths.Contains(input.Length))
             {
-                GeneralValues.error_message = "wrong length: " + input.Length;
+                GeneralValues.ErrorMessage = "wrong length: " + input.Length;
                 return false;
             }
             return true;
